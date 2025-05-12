@@ -4,8 +4,10 @@ import {
   FileText,
   Wrench,
   CalendarDays,
-  Sparkles,
+  DollarSign, // Changed from Sparkles
+  Users, // Added for Admin
   Home,
+  CreditCard, // Added for user Billing
 } from 'lucide-react';
 
 export const APP_NAME = "MyHOA";
@@ -32,10 +34,11 @@ export const NAV_ITEMS: NavItem[] = [
     icon: CalendarDays,
   },
   {
-    title: 'AI Document Assistant',
-    href: '/ai-assistant',
-    icon: Sparkles,
+    title: 'Billing', // Added
+    href: '/billing', // Added
+    icon: CreditCard, // Added
   },
+  // Removed AI Document Assistant
 ];
 
 export const PageTitles: Record<string, string> = {
@@ -43,5 +46,22 @@ export const PageTitles: Record<string, string> = {
   '/documents': 'Document Repository',
   '/service-requests': 'Service Requests',
   '/event-calendar': 'Event Calendar',
-  '/ai-assistant': 'AI Document Assistant',
+  '/billing': 'My Billing', // Added
+};
+
+// Admin constants
+export const ADMIN_APP_NAME = "MyHOA Admin";
+
+export const ADMIN_NAV_ITEMS: NavItem[] = [
+   {
+    title: 'Billing Management',
+    href: '/admin/billing',
+    icon: Users,
+  },
+  // Add other admin navigation items here
+];
+
+export const AdminPageTitles: Record<string, string> = {
+  '/admin/billing': 'Billing Management',
+  // Add other admin page titles here
 };

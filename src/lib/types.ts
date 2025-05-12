@@ -45,3 +45,27 @@ export interface CalendarEvent {
   category: 'event' | 'meeting' | 'maintenance' | 'community';
   location?: string;
 }
+
+export interface PaymentHistoryEntry {
+  id: string;
+  paymentDate: string; // YYYY-MM-DD
+  amountPaid: number;
+  principalPaid: number;
+  interestPaid: number;
+  remainingBalance: number;
+}
+
+export interface BillingInfo {
+  id: string; // Unique ID for the billing record
+  userId: string; // Link to a user
+  userName?: string; // Optional, for display
+  propertyAddress: string;
+  loanAmount: number;
+  interestRate: number; // Annual percentage rate, e.g., 5.5 for 5.5%
+  loanTermYears: number;
+  monthlyPayment: number;
+  paymentsMade: number; // Number of payments made
+  totalPayments: number; // loanTermYears * 12
+  nextDueDate: string; // YYYY-MM-DD
+  paymentHistory: PaymentHistoryEntry[];
+}
