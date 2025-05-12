@@ -5,7 +5,7 @@ import { Calendar } from "@/components/ui/calendar"; // For date picking context
 import type { CalendarEvent } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 import { Briefcase, CalendarCheck2, Construction, PartyPopper, MapPin, ClockIcon } from 'lucide-react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const events: CalendarEvent[] = [
   {
@@ -65,7 +65,13 @@ const getIconForCategory = (category: CalendarEvent['category']) => {
 };
 
 export default function EventCalendarPage() {
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setSelectedDate(new Date());
+    setIsClient(true);
+  }, []);
 
   const filteredEvents = events
     .filter(event => selectedDate ? new Date(event.date).toDateString() === selectedDate.toDateString() : true)
@@ -79,13 +85,19 @@ export default function EventCalendarPage() {
             <CardTitle>Select Date</CardTitle>
           </CardHeader>
           <CardContent className="flex justify-center">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              className="rounded-md border"
-              initialFocus
-            />
+            {isClient ? (
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={setSelectedDate}
+                className="rounded-md border"
+                initialFocus
+              />
+            ) : (
+              <div className="rounded-md border p-3 h-[298px] w-[280px] flex items-center justify-center">
+                <p>Loading Calendar...</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -95,13 +107,15 @@ export default function EventCalendarPage() {
           <CardHeader>
             <CardTitle>Upcoming Events</CardTitle>
             <CardDescription>
-              {selectedDate 
+              {isClient && selectedDate 
                 ? `Events for ${selectedDate.toLocaleDateString()}` 
                 : "All upcoming community events, meetings, and maintenance schedules."}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {filteredEvents.length === 0 ? (
+            {!isClient ? (
+              <p className="text-muted-foreground">Loading events...</p>
+            ) : filteredEvents.length === 0 ? (
               <p className="text-muted-foreground">
                 No events scheduled {selectedDate ? `for ${selectedDate.toLocaleDateString()}` : "for the selected criteria"}.
               </p>
