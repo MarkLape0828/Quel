@@ -4,14 +4,16 @@ import {
   FileText,
   Wrench,
   CalendarDays,
-  CreditCard, 
-  Users, 
-  ShieldCheck, // Replaced Home with ShieldCheck for Admin root
-  ClipboardList, // For Admin Service Requests
-  FolderKanban, // For Admin Documents
+  CreditCard,
+  Users,
+  ShieldCheck,
+  ClipboardList,
+  FolderKanban,
+  UserCog, // Added for User Management
+  LogOut, // Added for Logout button, though used directly in layouts
 } from 'lucide-react';
 
-export const APP_NAME = "MyHOA";
+export const APP_NAME = "The Quel";
 
 export const NAV_ITEMS: NavItem[] = [
   {
@@ -35,9 +37,9 @@ export const NAV_ITEMS: NavItem[] = [
     icon: CalendarDays,
   },
   {
-    title: 'Billing', 
-    href: '/billing', 
-    icon: CreditCard, 
+    title: 'Billing',
+    href: '/billing',
+    icon: CreditCard,
   },
 ];
 
@@ -54,13 +56,18 @@ export const PageTitles: Record<string, string> = {
 };
 
 // Admin constants
-export const ADMIN_APP_NAME = "MyHOA Admin";
+export const ADMIN_APP_NAME = "The Quel Admin";
 
 export const ADMIN_NAV_ITEMS: NavItem[] = [
    {
     title: 'Billing Management',
     href: '/admin/billing',
-    icon: Users,
+    icon: Users, // Kept Users icon for Billing Management
+  },
+  {
+    title: 'User Management', // New User Management page
+    href: '/admin/user-management',
+    icon: UserCog,
   },
   {
     title: 'Service Requests',
@@ -76,6 +83,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
 
 export const AdminPageTitles: Record<string, string> = {
   '/admin/billing': 'Billing Management',
+  '/admin/user-management': 'User Management', // Title for new page
   '/admin/service-requests': 'Manage Service Requests',
   '/admin/documents': 'Manage Documents',
   // Admin Auth Pages (if separate, otherwise uses main PageTitles)

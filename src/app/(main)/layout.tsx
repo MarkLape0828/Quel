@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation'; // Added useRouter
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -12,12 +12,13 @@ import {
   SidebarMenuButton,
   SidebarTrigger,
   useSidebar,
+  SidebarFooter, // Added SidebarFooter
 } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { APP_NAME, NAV_ITEMS, PageTitles } from '@/lib/constants';
 import { Logo } from '@/components/icons';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { PanelLeft } from 'lucide-react';
+import { PanelLeft, LogOut } from 'lucide-react'; // Added LogOut
 
 export default function MainAppLayout({
   children,
@@ -26,8 +27,14 @@ export default function MainAppLayout({
 }) {
   const pathname = usePathname();
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   const pageTitle = PageTitles[pathname] || APP_NAME;
+
+  const handleLogout = () => {
+    // In a real app, clear session/token here
+    router.push('/login');
+  };
 
   const sidebarContent = (
     <>
@@ -61,6 +68,16 @@ export default function MainAppLayout({
           </SidebarMenu>
         </SidebarContent>
       </ScrollArea>
+      <SidebarFooter className="p-2 mt-auto border-t border-sidebar-border">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleLogout} variant="ghost" className="w-full justify-start" tooltip={{ children: "Logout", side: 'right', align: 'center' }}>
+              <LogOut className="h-5 w-5" />
+              <span className="truncate group-data-[collapsible=icon]:hidden">Logout</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </>
   );
 

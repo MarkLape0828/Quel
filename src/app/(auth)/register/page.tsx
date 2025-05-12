@@ -8,7 +8,7 @@ export default function RegisterPage() {
     <Card className="w-full max-w-lg shadow-xl">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an Account</CardTitle>
-        <CardDescription>Join MyHOA to manage your community services and stay connected.</CardDescription>
+        <CardDescription>Join The Quel to manage your community services and stay connected.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <RegisterForm />

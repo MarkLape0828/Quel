@@ -8,7 +8,7 @@ export default function LoginPage() {
     <Card className="w-full max-w-md shadow-xl">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Welcome Back!</CardTitle>
-        <CardDescription>Log in to access your MyHOA account.</CardDescription>
+        <CardDescription>Log in to access your The Quel account.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <LoginForm />

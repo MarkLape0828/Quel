@@ -1,4 +1,4 @@
-import type { BillingInfo, PaymentHistoryEntry, DocumentItem } from './types';
+import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {
   if (annualInterestRate === 0) {
@@ -63,9 +63,9 @@ user1NextDueDate.setMonth(user1NextDueDate.getMonth() + user1PaymentsMade);
 
 
 export const mockUserBillingInfo: BillingInfo = {
-  id: 'billing-user1',
+  id: 'billing-user123', // Changed ID to match a mockUser
   userId: 'user123',
-  userName: 'John Doe',
+  userName: 'Alice Member', // Updated userName to match mockUser
   propertyAddress: '123 Main St, Anytown, USA',
   loanAmount: user1LoanAmount,
   interestRate: user1InterestRate,
@@ -98,9 +98,9 @@ user2NextDueDate.setMonth(user2NextDueDate.getMonth() + user2PaymentsMade);
 const adminUser1Billing: BillingInfo = { ...mockUserBillingInfo };
 
 const adminUser2Billing: BillingInfo = {
-  id: 'billing-user2',
+  id: 'billing-user456', // Changed ID to match a mockUser
   userId: 'user456',
-  userName: 'Jane Smith',
+  userName: 'Bob Homeowner', // Updated userName to match mockUser
   propertyAddress: '456 Oak Ave, Anytown, USA',
   loanAmount: user2LoanAmount,
   interestRate: user2InterestRate,
@@ -116,10 +116,10 @@ export const mockAdminBillingList: BillingInfo[] = [
   adminUser1Billing,
   adminUser2Billing,
   {
-    id: 'billing-user3',
-    userId: 'user789',
-    userName: 'Robert Johnson',
-    propertyAddress: '789 Pine Ln, Anytown, USA',
+    id: 'billing-admin001', // Example for admin user
+    userId: 'admin001',
+    userName: 'Site Admin',
+    propertyAddress: '789 Pine Ln, Admin City, USA',
     loanAmount: 320000,
     interestRate: 3.8,
     loanTermYears: 30,
@@ -174,22 +174,36 @@ export let mockDocuments: DocumentItem[] = [
   },
   {
     id: "doc-user123-lease",
-    name: "Lease Agreement - John Doe",
+    name: "Lease Agreement - Alice Member",
     url: "/documents/user123-lease.pdf",
     type: "user-specific",
     uploadDate: "2024-07-10",
     size: "750 KB",
-    userId: "user123", // Corresponds to mockUserBillingInfo.userId
+    userId: "user123", 
     uploadedBy: "admin",
   },
   {
     id: "doc-user456-pet-policy",
-    name: "Pet Policy Agreement - Jane Smith",
+    name: "Pet Policy Agreement - Bob Homeowner",
     url: "/documents/user456-pet-policy.pdf",
     type: "user-specific",
     uploadDate: "2024-07-11",
     size: "120 KB",
-    userId: "user456", // Corresponds to adminUser2Billing.userId
+    userId: "user456", 
     uploadedBy: "user",
   },
 ];
+
+
+// Mock Users for User Management
+export let mockUsers: User[] = [
+  { id: 'admin001', email: 'admin@example.com', firstName: 'Site', lastName: 'Admin', role: 'admin' },
+  { id: 'user001', email: 'user@example.com', firstName: 'Regular', lastName: 'User', role: 'hoa' }, // Default role for regular user
+  { id: 'user002', email: 'staff@example.com', firstName: 'Jane', lastName: 'Staff', role: 'staff' },
+  { id: 'user003', email: 'utility@example.com', firstName: 'Utility', lastName: 'Person', role: 'utility' },
+  { id: 'user123', email: 'member1@example.com', firstName: 'Alice', lastName: 'Member', role: 'hoa' }, // Matches existing doc
+  { id: 'user456', email: 'member2@example.com', firstName: 'Bob', lastName: 'Homeowner', role: 'hoa' }, // Matches existing doc
+  { id: 'user789', email: 'robert.johnson@example.com', firstName: 'Robert', lastName: 'Johnson', role: 'hoa'}, // Matches billing record
+];
+
+export const USER_ROLES: UserRole[] = ['admin', 'hoa', 'staff', 'utility'];

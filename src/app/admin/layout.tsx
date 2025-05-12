@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation'; // Added useRouter
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -12,12 +12,13 @@ import {
   SidebarMenuButton,
   SidebarTrigger,
   useSidebar,
+  SidebarFooter, // Added SidebarFooter
 } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ADMIN_APP_NAME, ADMIN_NAV_ITEMS, AdminPageTitles } from '@/lib/constants';
-import { Logo } from '@/components/icons'; // Using the same logo for now
+// import { Logo } from '@/components/icons'; // Not used directly for admin, ShieldCheck is used
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { PanelLeft, ShieldCheck } from 'lucide-react';
+import { PanelLeft, ShieldCheck, LogOut } from 'lucide-react'; // Added LogOut
 
 export default function AdminAppLayout({
   children,
@@ -26,8 +27,14 @@ export default function AdminAppLayout({
 }) {
   const pathname = usePathname();
   const { isMobile } = useSidebar();
+  const router = useRouter();
 
   const pageTitle = AdminPageTitles[pathname] || ADMIN_APP_NAME;
+
+  const handleLogout = () => {
+    // In a real app, clear session/token here
+    router.push('/login'); // Redirect to main login page
+  };
 
   const sidebarContent = (
     <>
@@ -61,6 +68,16 @@ export default function AdminAppLayout({
           </SidebarMenu>
         </SidebarContent>
       </ScrollArea>
+      <SidebarFooter className="p-2 mt-auto border-t border-sidebar-border">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleLogout} variant="ghost" className="w-full justify-start" tooltip={{ children: "Logout", side: 'right', align: 'center' }}>
+              <LogOut className="h-5 w-5" />
+              <span className="truncate group-data-[collapsible=icon]:hidden">Logout</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </>
   );
 

@@ -74,10 +74,12 @@ export interface BillingInfo {
 }
 
 // Auth related types
+export type UserRole = 'hoa' | 'admin' | 'staff' | 'utility';
+
 export interface User {
   id: string;
   email: string;
-  role: 'user' | 'admin';
-  firstName?: string;
-  lastName?: string;
+  role: UserRole;
+  firstName: string;
+  lastName: string;
 }
