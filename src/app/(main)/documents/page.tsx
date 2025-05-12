@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Download, FileText, FileArchive, FileBarChart } from "lucide-react";
 import type { DocumentItem } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 
 const documents: DocumentItem[] = [
   {
