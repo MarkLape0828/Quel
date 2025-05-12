@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { DocumentItem } from "@/lib/types";
-import { AddDocumentFormValues, addDocument, deleteDocument, getAllDocuments } from '@/lib/document-actions';
+import { addDocument, deleteDocument, getAllDocuments } from '@/lib/document-actions';
 import { useToast } from '@/hooks/use-toast';
 import { Download, FileText, FileArchive, FileBarChart, Trash2, PlusCircle, UserSquare2 } from "lucide-react";
 import {
@@ -25,7 +25,7 @@ import { useForm } from "react-hook-form";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AddDocumentSchema } from '@/lib/document-actions'; // Assuming schema is exported
+import { AddDocumentSchema, type AddDocumentFormValues } from '@/lib/schemas/document-schemas';
 
 const getIconForType = (type: DocumentItem["type"]) => {
   switch (type) {
@@ -233,3 +233,4 @@ export default function AdminDocumentsPage() {
     </div>
   );
 }
+
