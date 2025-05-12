@@ -4,10 +4,11 @@ import {
   FileText,
   Wrench,
   CalendarDays,
-  DollarSign, // Changed from Sparkles
-  Users, // Added for Admin
-  Home,
-  CreditCard, // Added for user Billing
+  CreditCard, 
+  Users, 
+  ShieldCheck, // Replaced Home with ShieldCheck for Admin root
+  ClipboardList, // For Admin Service Requests
+  FolderKanban, // For Admin Documents
 } from 'lucide-react';
 
 export const APP_NAME = "MyHOA";
@@ -34,11 +35,10 @@ export const NAV_ITEMS: NavItem[] = [
     icon: CalendarDays,
   },
   {
-    title: 'Billing', // Added
-    href: '/billing', // Added
-    icon: CreditCard, // Added
+    title: 'Billing', 
+    href: '/billing', 
+    icon: CreditCard, 
   },
-  // Removed AI Document Assistant
 ];
 
 export const PageTitles: Record<string, string> = {
@@ -46,7 +46,11 @@ export const PageTitles: Record<string, string> = {
   '/documents': 'Document Repository',
   '/service-requests': 'Service Requests',
   '/event-calendar': 'Event Calendar',
-  '/billing': 'My Billing', // Added
+  '/billing': 'My Billing',
+  // Auth Pages
+  '/login': 'Login',
+  '/register': 'Register',
+  '/forgot-password': 'Forgot Password',
 };
 
 // Admin constants
@@ -58,10 +62,22 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     href: '/admin/billing',
     icon: Users,
   },
-  // Add other admin navigation items here
+  {
+    title: 'Service Requests',
+    href: '/admin/service-requests',
+    icon: ClipboardList,
+  },
+  {
+    title: 'Document Management',
+    href: '/admin/documents',
+    icon: FolderKanban,
+  },
 ];
 
 export const AdminPageTitles: Record<string, string> = {
   '/admin/billing': 'Billing Management',
-  // Add other admin page titles here
+  '/admin/service-requests': 'Manage Service Requests',
+  '/admin/documents': 'Manage Documents',
+  // Admin Auth Pages (if separate, otherwise uses main PageTitles)
+  '/admin/login': 'Admin Login',
 };

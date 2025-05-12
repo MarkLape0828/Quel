@@ -18,9 +18,11 @@ export interface DocumentItem {
   id: string;
   name: string;
   url: string; // Could be a download link or path to a file
-  type: 'guideline' | 'minutes' | 'form' | 'report';
+  type: 'guideline' | 'minutes' | 'form' | 'report' | 'user-specific';
   uploadDate: string;
   size?: string;
+  userId: string; // ID of the user this document belongs to or 'hoa_general' for HOA wide documents
+  uploadedBy: 'admin' | 'user' | 'system'; // Who uploaded it
 }
 
 export interface ServiceRequest {
@@ -32,7 +34,8 @@ export interface ServiceRequest {
   submittedDate: string;
   resolvedDate?: string;
   location?: string;
-  submittedBy?: string;
+  submittedBy?: string; // User ID or name
+  assignedTo?: string; // Admin ID or name for tracking
 }
 
 export interface CalendarEvent {
@@ -68,4 +71,13 @@ export interface BillingInfo {
   totalPayments: number; // loanTermYears * 12
   nextDueDate: string; // YYYY-MM-DD
   paymentHistory: PaymentHistoryEntry[];
+}
+
+// Auth related types
+export interface User {
+  id: string;
+  email: string;
+  role: 'user' | 'admin';
+  firstName?: string;
+  lastName?: string;
 }

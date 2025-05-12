@@ -1,4 +1,4 @@
-import type { BillingInfo, PaymentHistoryEntry } from './types';
+import type { BillingInfo, PaymentHistoryEntry, DocumentItem } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {
   if (annualInterestRate === 0) {
@@ -51,7 +51,7 @@ const user1LoanTermYears = 30;
 const user1MonthlyPayment = calculateMonthlyPayment(user1LoanAmount, user1InterestRate, user1LoanTermYears);
 const user1PaymentsMade = 60; // 5 years
 const user1PaymentStartDate = "2019-07-01";
-const { history: user1PaymentHistory, remainingBalance: user1RemainingBalance } = generatePaymentHistory(
+const { history: user1PaymentHistory } = generatePaymentHistory(
   user1LoanAmount,
   user1InterestRate,
   user1MonthlyPayment,
@@ -84,7 +84,7 @@ const user2LoanTermYears = 15;
 const user2MonthlyPayment = calculateMonthlyPayment(user2LoanAmount, user2InterestRate, user2LoanTermYears);
 const user2PaymentsMade = 24; // 2 years
 const user2PaymentStartDate = "2022-07-01";
-const { history: user2PaymentHistory, remainingBalance: user2RemainingBalance } = generatePaymentHistory(
+const { history: user2PaymentHistory } = generatePaymentHistory(
   user2LoanAmount,
   user2InterestRate,
   user2MonthlyPayment,
@@ -129,4 +129,67 @@ export const mockAdminBillingList: BillingInfo[] = [
     nextDueDate: '2025-08-01',
     paymentHistory: generatePaymentHistory(320000, 3.8, calculateMonthlyPayment(320000, 3.8, 30), 12, "2023-07-01").history,
   }
+];
+
+export let mockDocuments: DocumentItem[] = [
+  {
+    id: "doc-guidelines-2024",
+    name: "HOA Guidelines Rev. 2024",
+    url: "/documents/hoa-guidelines-2024.pdf",
+    type: "guideline",
+    uploadDate: "2024-01-15",
+    size: "1.2 MB",
+    userId: "hoa_general",
+    uploadedBy: "admin",
+  },
+  {
+    id: "doc-minutes-may-2024",
+    name: "Meeting Minutes - May 2024",
+    url: "/documents/meeting-minutes-may-2024.pdf",
+    type: "minutes",
+    uploadDate: "2024-06-01",
+    size: "350 KB",
+    userId: "hoa_general",
+    uploadedBy: "admin",
+  },
+  {
+    id: "doc-arc-form",
+    name: "Architectural Change Request Form",
+    url: "/documents/arc-request-form.pdf",
+    type: "form",
+    uploadDate: "2023-11-20",
+    size: "150 KB",
+    userId: "hoa_general",
+    uploadedBy: "system",
+  },
+  {
+    id: "doc-financial-report-2023",
+    name: "Annual Financial Report 2023",
+    url: "/documents/financial-report-2023.pdf",
+    type: "report",
+    uploadDate: "2024-03-01",
+    size: "2.5 MB",
+    userId: "hoa_general",
+    uploadedBy: "admin",
+  },
+  {
+    id: "doc-user123-lease",
+    name: "Lease Agreement - John Doe",
+    url: "/documents/user123-lease.pdf",
+    type: "user-specific",
+    uploadDate: "2024-07-10",
+    size: "750 KB",
+    userId: "user123", // Corresponds to mockUserBillingInfo.userId
+    uploadedBy: "admin",
+  },
+  {
+    id: "doc-user456-pet-policy",
+    name: "Pet Policy Agreement - Jane Smith",
+    url: "/documents/user456-pet-policy.pdf",
+    type: "user-specific",
+    uploadDate: "2024-07-11",
+    size: "120 KB",
+    userId: "user456", // Corresponds to adminUser2Billing.userId
+    uploadedBy: "user",
+  },
 ];
