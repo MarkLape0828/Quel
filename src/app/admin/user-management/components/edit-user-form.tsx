@@ -1,12 +1,14 @@
+
 "use client";
 
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -32,11 +34,18 @@ export function EditUserForm({ user, onSuccess }: EditUserFormProps) {
   const form = useForm<EditUserFormValues>({
     resolver: zodResolver(EditUserSchema),
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      role: user.role,
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      email: user.email || "",
+      role: user.role || undefined,
+      propertyId: user.propertyId || "",
+      propertyAddress: user.propertyAddress || "",
     },
+  });
+
+  const currentRole = useWatch({
+    control: form.control,
+    name: "role",
   });
 
   async function onSubmit(data: EditUserFormValues) {
@@ -49,7 +58,7 @@ export function EditUserForm({ user, onSuccess }: EditUserFormProps) {
         title: "User Updated",
         description: `${result.user.firstName} ${result.user.lastName}'s information has been updated.`,
       });
-      onSuccess(result.user);
+      onSuccess(result.user); // This will close the dialog via parent state
     } else {
       toast({
         title: "Error Updating User",
@@ -116,7 +125,17 @@ export function EditUserForm({ user, onSuccess }: EditUserFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Role</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select 
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  // Reset property fields if role is not 'hoa'
+                  if (value !== 'hoa') {
+                    form.setValue('propertyId', '');
+                    form.setValue('propertyAddress', '');
+                  }
+                }} 
+                defaultValue={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a role" />
@@ -134,7 +153,40 @@ export function EditUserForm({ user, onSuccess }: EditUserFormProps) {
             </FormItem>
           )}
         />
-        {/* Password change can be a separate, more secure flow if needed */}
+
+        {currentRole === 'hoa' && (
+          <>
+            <FormField
+              control={form.control}
+              name="propertyId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property ID (Optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., P101" {...field} />
+                  </FormControl>
+                  <FormDescription>Assign a unique ID to this user's property.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="propertyAddress"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Property Address (Optional)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., 123 Main St, The Quel" {...field} />
+                  </FormControl>
+                  <FormDescription>The address of the user's property.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
+        
         <Button type="submit" disabled={isSubmitting} className="w-full">
           {isSubmitting ? "Saving Changes..." : "Save Changes"}
         </Button>

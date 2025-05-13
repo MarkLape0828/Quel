@@ -21,5 +21,7 @@ export const EditUserSchema = z.object({
   role: z.enum(USER_ROLES as [UserRole, ...UserRole[]], {
     required_error: "User role is required.",
   }),
+  propertyId: z.string().optional(),
+  propertyAddress: z.string().optional(),
 });
 export type EditUserFormValues = z.infer<typeof EditUserSchema>;

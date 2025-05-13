@@ -9,8 +9,9 @@ import {
   ShieldCheck,
   ClipboardList,
   FolderKanban,
-  UserCog, // Added for User Management
-  LogOut, // Added for Logout button, though used directly in layouts
+  UserCog, 
+  LogOut, 
+  IdCard, // Added for Profile
 } from 'lucide-react';
 
 export const APP_NAME = "The Quel";
@@ -41,6 +42,11 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/billing',
     icon: CreditCard,
   },
+  {
+    title: 'Profile',
+    href: '/profile',
+    icon: IdCard,
+  },
 ];
 
 export const PageTitles: Record<string, string> = {
@@ -49,6 +55,7 @@ export const PageTitles: Record<string, string> = {
   '/service-requests': 'Service Requests',
   '/event-calendar': 'Event Calendar',
   '/billing': 'My Billing',
+  '/profile': 'My Profile',
   // Auth Pages
   '/login': 'Login',
   '/register': 'Register',
@@ -62,10 +69,10 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
    {
     title: 'Billing Management',
     href: '/admin/billing',
-    icon: Users, // Kept Users icon for Billing Management
+    icon: Users,
   },
   {
-    title: 'User Management', // New User Management page
+    title: 'User Management',
     href: '/admin/user-management',
     icon: UserCog,
   },
@@ -79,13 +86,19 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     href: '/admin/documents',
     icon: FolderKanban,
   },
+  {
+    title: 'My Profile',
+    href: '/admin/profile',
+    icon: IdCard,
+  },
 ];
 
 export const AdminPageTitles: Record<string, string> = {
   '/admin/billing': 'Billing Management',
-  '/admin/user-management': 'User Management', // Title for new page
+  '/admin/user-management': 'User Management',
   '/admin/service-requests': 'Manage Service Requests',
   '/admin/documents': 'Manage Documents',
+  '/admin/profile': 'My Admin Profile',
   // Admin Auth Pages (if separate, otherwise uses main PageTitles)
   '/admin/login': 'Admin Login',
 };

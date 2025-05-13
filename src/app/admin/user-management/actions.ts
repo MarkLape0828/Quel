@@ -1,3 +1,4 @@
+
 "use server";
 
 import { mockUsers, USER_ROLES } from "@/lib/mock-data";
@@ -89,8 +90,17 @@ export async function updateUser(
 
     mockUsers[userIndex] = {
       ...mockUsers[userIndex],
-      ...validatedData,
+      ...validatedData, // This will overwrite firstName, lastName, email, role
+      // Explicitly handle propertyId and propertyAddress based on role
+      propertyId: validatedData.role === 'hoa' ? validatedData.propertyId : undefined,
+      propertyAddress: validatedData.role === 'hoa' ? validatedData.propertyAddress : undefined,
     };
+    
+    // If role is changed away from 'hoa', clear property info
+    if (validatedData.role !== 'hoa') {
+        mockUsers[userIndex].propertyId = undefined;
+        mockUsers[userIndex].propertyAddress = undefined;
+    }
     
     console.log("User updated:", mockUsers[userIndex]);
     return { success: true, message: "User updated successfully.", user: { ...mockUsers[userIndex] } };

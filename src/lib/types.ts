@@ -95,4 +95,6 @@ export interface User {
   firstName: string;
   lastName: string;
   isArchived?: boolean; // Added for archiving users
+  propertyId?: string; // Assigned property ID for HOA members
+  propertyAddress?: string; // Assigned property address for HOA members
 }
