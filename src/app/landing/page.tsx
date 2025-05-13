@@ -13,12 +13,13 @@ export default function LandingPage() {
   const closeSignInModal = () => setIsSignInModalOpen(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background w-full">
       <LandingHeader onSignInClick={openSignInModal} />
-      <main className="flex-grow">
+      <main className="flex-grow w-full">
         <HeroSection />
       </main>
       <SignInModal isOpen={isSignInModalOpen} onClose={closeSignInModal} />
     </div>
   );
 }
+

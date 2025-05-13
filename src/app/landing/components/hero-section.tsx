@@ -8,15 +8,15 @@ export default function HeroSection() {
   const features = ["Spacious Lots", "Luxury Amenities", "Scenic Serenity"];
 
   return (
-    <section className="relative h-[calc(100vh-4rem)] flex items-center justify-center text-white overflow-hidden">
+    <section className="relative w-full h-[calc(100vh-4rem)] flex items-center justify-center text-white overflow-hidden">
       <Image
         src="https://picsum.photos/1920/1080"
-        alt="Modern residential area"
+        alt="Modern residential area with calm waters"
         layout="fill"
         objectFit="cover"
         quality={80}
         className="absolute z-0"
-        data-ai-hint="modern houses residential"
+        data-ai-hint="modern houses lake"
       />
       <div className="absolute inset-0 bg-black/50 z-10" /> {/* Dark overlay */}
       
