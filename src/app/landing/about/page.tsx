@@ -31,7 +31,7 @@ export default function AboutPage() {
                 fill
                 style={{ objectFit: "cover" }}
                 className="w-full h-full"
-                data-ai-hint="team planning blueprints"
+                data-ai-hint="neighborhood sketch"
               />
             </div>
           </section>

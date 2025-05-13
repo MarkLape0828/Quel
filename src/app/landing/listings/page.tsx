@@ -20,7 +20,7 @@ const listings = [
     sqft: 2800,
     status: "For Sale",
     imageUrl: "https://picsum.photos/seed/listing1/600/400",
-    aiHint: "modern villa exterior",
+    aiHint: "villa exterior",
     tags: ["Family Friendly", "New Construction", "Luxury"],
   },
   {
@@ -34,7 +34,7 @@ const listings = [
     sqft: 2200,
     status: "For Sale",
     imageUrl: "https://picsum.photos/seed/listing2/600/400",
-    aiHint: "house lake view",
+    aiHint: "lakeside home",
     tags: ["Waterfront", "Quiet Location", "Scenic Views"],
   },
   {
@@ -48,7 +48,7 @@ const listings = [
     sqft: 1800,
     status: "Pending",
     imageUrl: "https://picsum.photos/seed/listing3/600/400",
-    aiHint: "modern townhouse exterior",
+    aiHint: "urban townhome",
     tags: ["Urban Living", "Low Maintenance", "Community Pool"],
   },
   {
@@ -62,7 +62,7 @@ const listings = [
     sqft: 3500,
     status: "Sold",
     imageUrl: "https://picsum.photos/seed/listing4/600/400",
-    aiHint: "house beautiful garden",
+    aiHint: "home garden",
     tags: ["Large Lot", "Mature Garden", "Renovated"],
   },
 ];

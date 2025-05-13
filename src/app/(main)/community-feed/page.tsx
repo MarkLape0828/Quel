@@ -52,7 +52,7 @@ export default function CommunityFeedPage() {
                     width={600} 
                     height={200} 
                     className="rounded-md object-cover aspect-[3/1]"
-                    data-ai-hint="community event" 
+                    data-ai-hint="pool party" 
                 />
             )}
           </CardContent>

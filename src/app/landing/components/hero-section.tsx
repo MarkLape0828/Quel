@@ -21,7 +21,7 @@ export default function HeroSection({ onScheduleTourClick }: HeroSectionProps) {
         style={{ objectFit: 'cover' }}
         quality={80}
         className="absolute z-0"
-        data-ai-hint="luxury estate sunset"
+        data-ai-hint="modern neighborhood"
         priority
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10" /> {/* Gradient overlay */}

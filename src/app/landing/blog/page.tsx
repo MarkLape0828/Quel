@@ -17,7 +17,7 @@ const blogPosts = [
     author: "Jane Gardener",
     category: "Community Living",
     imageUrl: "https://picsum.photos/seed/blog1/600/400",
-    aiHint: "beautiful garden community",
+    aiHint: "manicured gardens",
   },
   {
     id: "2",
@@ -28,7 +28,7 @@ const blogPosts = [
     author: "John Realtor",
     category: "Real Estate",
     imageUrl: "https://picsum.photos/seed/blog2/600/400",
-    aiHint: "luxury pool clubhouse",
+    aiHint: "clubhouse pool",
   },
   {
     id: "3",
@@ -39,7 +39,7 @@ const blogPosts = [
     author: "Eco Warrior",
     category: "Sustainability",
     imageUrl: "https://picsum.photos/seed/blog3/600/400",
-    aiHint: "solar panels green-energy",
+    aiHint: "solar homes",
   },
 ];
 
