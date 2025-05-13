@@ -155,7 +155,7 @@ export function DocumentComments({ document, currentUser, onCommentAdded }: Docu
           {document.comments.length === 0 && (
             <p className="text-sm text-muted-foreground">No comments yet.</p>
           )}
-          {document.comments.map((comment) => (
+          {document.comments.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((comment) => ( // Sort newest first for display
             <div key={comment.id} className="flex items-start space-x-3 p-3 bg-secondary/30 rounded-lg">
               <Avatar className="h-8 w-8">
                 <AvatarFallback>{comment.userName.substring(0, 1)}</AvatarFallback>

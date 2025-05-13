@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -24,14 +25,15 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { ServiceRequestSchema, type ServiceRequestFormValues } from "../schema";
 import { submitServiceRequest } from "../actions";
-import type { ServiceRequest } from "@/lib/types";
+import type { ServiceRequest, User } from "@/lib/types";
 import React from "react";
 
 interface ServiceRequestFormProps {
   onFormSubmit: (newRequest: ServiceRequest) => void;
+  currentUser: User;
 }
 
-export function ServiceRequestForm({ onFormSubmit }: ServiceRequestFormProps) {
+export function ServiceRequestForm({ onFormSubmit, currentUser }: ServiceRequestFormProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -46,8 +48,12 @@ export function ServiceRequestForm({ onFormSubmit }: ServiceRequestFormProps) {
   });
 
   async function onSubmit(data: ServiceRequestFormValues) {
+    if (!currentUser) {
+        toast({ title: "Error", description: "User not found. Please log in.", variant: "destructive" });
+        return;
+    }
     setIsSubmitting(true);
-    const result = await submitServiceRequest(data);
+    const result = await submitServiceRequest(data, currentUser);
     setIsSubmitting(false);
 
     if (result.success && result.request) {
@@ -149,7 +155,7 @@ export function ServiceRequestForm({ onFormSubmit }: ServiceRequestFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto">
+        <Button type="submit" disabled={isSubmitting || !currentUser} className="w-full sm:w-auto">
           {isSubmitting ? "Submitting..." : "Submit Request"}
         </Button>
       </form>

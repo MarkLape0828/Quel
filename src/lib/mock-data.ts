@@ -1,4 +1,4 @@
-import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact } from './types';
+import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {
   if (annualInterestRate === 0) {
@@ -144,7 +144,7 @@ export let mockDocuments: DocumentItem[] = [
     comments: [
       {
         id: "comment-1",
-        documentId: "doc-guidelines-2024",
+        parentId: "doc-guidelines-2024",
         userId: "user123",
         userName: "Alice Member",
         text: "Thanks for the update! Are there any changes to the pet policy?",
@@ -152,7 +152,7 @@ export let mockDocuments: DocumentItem[] = [
       },
       {
         id: "comment-2",
-        documentId: "doc-guidelines-2024",
+        parentId: "doc-guidelines-2024",
         userId: "admin001",
         userName: "Site Admin",
         text: "Hi Alice, the pet policy remains the same as in the 2023 version. See page 12.",
@@ -196,7 +196,7 @@ export let mockDocuments: DocumentItem[] = [
     comments: [
       {
         id: "comment-3",
-        documentId: "doc-financial-report-2023",
+        parentId: "doc-financial-report-2023",
         userId: "user456",
         userName: "Bob Homeowner",
         text: "Could we get a breakdown of the maintenance expenses?",
@@ -283,3 +283,6 @@ export let mockDirectoryContacts: DirectoryContact[] = [
     notes: "For information about upcoming community events and hall bookings."
   }
 ];
+
+// This is now defined in service-requests/actions.ts to be mutable by actions
+// export let mockServiceRequests: ServiceRequest[] = [...]

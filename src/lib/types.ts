@@ -16,7 +16,7 @@ export interface Announcement {
 
 export interface Comment {
   id: string;
-  documentId: string;
+  parentId: string; // ID of the document or service request
   userId: string; // ID of the user who made the comment
   userName: string; // Name of the user for display
   text: string;
@@ -37,17 +37,29 @@ export interface DocumentItem {
   comments: Comment[];
 }
 
+export type ServiceRequestStatus = 'pending' | 'in-progress' | 'resolved' | 'closed';
+
+export interface StatusChange {
+  status: ServiceRequestStatus;
+  date: string; // ISO string format
+  changedBy: string; // User ID or name of who changed the status
+  notes?: string; // Optional notes about the status change
+}
+
 export interface ServiceRequest {
   id: string;
   title: string;
   description: string;
   category: 'maintenance' | 'security' | 'other';
-  status: 'pending' | 'in-progress' | 'resolved' | 'closed';
+  status: ServiceRequestStatus;
   submittedDate: string;
   resolvedDate?: string;
   location?: string;
-  submittedBy?: string; // User ID or name
-  assignedTo?: string; // Admin ID or name for tracking
+  submittedByUserId: string; // User ID of the submitter
+  submittedByUserName: string; // Name of the submitter for display
+  assignedTo?: string; // Name or ID of the person/team assigned
+  comments: Comment[];
+  statusHistory: StatusChange[];
 }
 
 export interface CalendarEvent {
@@ -62,7 +74,7 @@ export interface CalendarEvent {
 }
 
 export interface PaymentHistoryEntry {
-  id: string;
+  id:string;
   paymentDate: string; // YYYY-MM-DD
   amountPaid: number;
   principalPaid: number;

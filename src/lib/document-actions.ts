@@ -93,7 +93,7 @@ export async function addCommentToDocument(
 
     const newComment: Comment = {
       id: `comment-${Date.now()}`,
-      documentId: documentId,
+      parentId: documentId, // Use parentId
       userId: payload.userId,
       userName: payload.userName,
       text: validatedText.text,
