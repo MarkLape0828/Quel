@@ -231,13 +231,13 @@ export let mockDocuments: DocumentItem[] = [
 
 // Mock Users for User Management
 export let mockUsers: User[] = [
-  { id: 'admin001', email: 'admin@example.com', firstName: 'Site', lastName: 'Admin', role: 'admin' },
-  { id: 'user001', email: 'user@example.com', firstName: 'Regular', lastName: 'User', role: 'hoa' }, // Default role for regular user
-  { id: 'user002', email: 'staff@example.com', firstName: 'Jane', lastName: 'Staff', role: 'staff' },
-  { id: 'user003', email: 'utility@example.com', firstName: 'Utility', lastName: 'Person', role: 'utility' },
-  { id: 'user123', email: 'member1@example.com', firstName: 'Alice', lastName: 'Member', role: 'hoa' }, // Matches existing doc
-  { id: 'user456', email: 'member2@example.com', firstName: 'Bob', lastName: 'Homeowner', role: 'hoa' }, // Matches existing doc
-  { id: 'user789', email: 'robert.johnson@example.com', firstName: 'Robert', lastName: 'Johnson', role: 'hoa'}, // Matches billing record
+  { id: 'admin001', email: 'admin@example.com', firstName: 'Site', lastName: 'Admin', role: 'admin', isArchived: false },
+  { id: 'user001', email: 'user@example.com', firstName: 'Regular', lastName: 'User', role: 'hoa', isArchived: false },
+  { id: 'user002', email: 'staff@example.com', firstName: 'Jane', lastName: 'Staff', role: 'staff', isArchived: false },
+  { id: 'user003', email: 'utility@example.com', firstName: 'Utility', lastName: 'Person', role: 'utility', isArchived: false },
+  { id: 'user123', email: 'member1@example.com', firstName: 'Alice', lastName: 'Member', role: 'hoa', isArchived: false },
+  { id: 'user456', email: 'member2@example.com', firstName: 'Bob', lastName: 'Homeowner', role: 'hoa', isArchived: false },
+  { id: 'user789', email: 'robert.johnson@example.com', firstName: 'Robert', lastName: 'Johnson', role: 'hoa', isArchived: false},
 ];
 
 export const USER_ROLES: UserRole[] = ['admin', 'hoa', 'staff', 'utility'];

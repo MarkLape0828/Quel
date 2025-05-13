@@ -94,4 +94,5 @@ export interface User {
   role: UserRole;
   firstName: string;
   lastName: string;
+  isArchived?: boolean; // Added for archiving users
 }
