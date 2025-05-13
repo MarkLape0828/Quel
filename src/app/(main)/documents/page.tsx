@@ -1,10 +1,9 @@
-
 "use client"; 
 
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, FileArchive, FileBarChart, UserSquare2, MessageSquare } from "lucide-react";
+import { Download, FileText, FileArchive, FileBarChart, UserSquare2, MessageSquare, ChevronDown } from "lucide-react"; // Added ChevronDown
 import type { DocumentItem, User } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { getDocumentsForUserOrGeneral } from '@/lib/document-actions'; 
@@ -32,7 +31,6 @@ const getIconForType = (type: DocumentItem["type"]) => {
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [expandedDocumentId, setExpandedDocumentId] = useState<string | null>(null);
   
   // Mock current user ID and user object. In a real app, this would come from auth context.
   const currentUserId = "user123"; 
@@ -95,8 +93,11 @@ export default function DocumentsPage() {
                               </a>
                             </Button>
                             <AccordionTrigger asChild>
-                               <Button variant="outline" size="sm">
-                                <MessageSquare className="mr-2 h-4 w-4" /> Comments ({doc.comments.length})
+                               <Button variant="outline" size="sm" className="justify-between"> {/* Ensure Button can layout children */}
+                                <span className="flex items-center">
+                                  <MessageSquare className="mr-2 h-4 w-4" /> Comments ({doc.comments.length})
+                                </span>
+                                <ChevronDown className="h-4 w-4 shrink-0" /> {/* Add ChevronDown icon here */}
                                </Button>
                             </AccordionTrigger>
                           </TableCell>
