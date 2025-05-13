@@ -14,6 +14,7 @@ import {
   IdCard,
   BookUser, // For admin manage contacts
   ListChecks, // For user contact directory
+  Bell, // Added Bell Icon
 } from 'lucide-react';
 
 export const APP_NAME = "The Quel";
@@ -54,6 +55,12 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/profile',
     icon: IdCard,
   },
+  // Bell icon is usually in the header, not a main nav item, but added for completeness if needed.
+  // {
+  //   title: 'Notifications',
+  //   href: '/notifications', // A dedicated notifications page might be useful
+  //   icon: Bell,
+  // },
 ];
 
 export const PageTitles: Record<string, string> = {
@@ -64,6 +71,7 @@ export const PageTitles: Record<string, string> = {
   '/billing': 'My Billing',
   '/contact-directory': 'Contact Directory',
   '/profile': 'My Profile',
+  '/notifications': 'Notifications', // Title for a potential notifications page
   // Auth Pages
   '/login': 'Login',
   '/register': 'Register',
@@ -104,6 +112,11 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     href: '/admin/profile',
     icon: IdCard,
   },
+  // {
+  //   title: 'Admin Notifications',
+  //   href: '/admin/notifications',
+  //   icon: Bell,
+  // },
 ];
 
 export const AdminPageTitles: Record<string, string> = {
@@ -113,6 +126,7 @@ export const AdminPageTitles: Record<string, string> = {
   '/admin/documents': 'Manage Documents',
   '/admin/contact-directory': 'Manage Contact Directory',
   '/admin/profile': 'My Admin Profile',
+  '/admin/notifications': 'Admin Notifications', // Title for a potential admin notifications page
   // Admin Auth Pages (if separate, otherwise uses main PageTitles)
   '/admin/login': 'Admin Login',
 };

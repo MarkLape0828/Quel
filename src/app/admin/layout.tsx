@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation'; // Added useRouter
+import { usePathname, useRouter } from 'next/navigation'; 
 import { Button } from '@/components/ui/button';
 import {
   Sidebar,
@@ -10,15 +10,14 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarTrigger,
-  useSidebar,
-  SidebarFooter, // Added SidebarFooter
+  useSidebar, 
+  SidebarFooter, 
 } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ADMIN_APP_NAME, ADMIN_NAV_ITEMS, AdminPageTitles } from '@/lib/constants';
-// import { Logo } from '@/components/icons'; // Not used directly for admin, ShieldCheck is used
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { PanelLeft, ShieldCheck, LogOut } from 'lucide-react'; // Added LogOut
+import { PanelLeft, ShieldCheck, LogOut } from 'lucide-react'; 
+import { NotificationBell } from '@/components/notifications/notification-bell'; // Added NotificationBell import
 
 export default function AdminAppLayout({
   children,
@@ -26,14 +25,16 @@ export default function AdminAppLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { isMobile } = useSidebar();
+  const { isMobile, open: sidebarOpen, setOpen: setSidebarOpen } = useSidebar(); // Get sidebar state
   const router = useRouter();
+
+  // MOCK ADMIN USER ID - In a real app, get this from auth session
+  const currentAdminId = "admin001"; 
 
   const pageTitle = AdminPageTitles[pathname] || ADMIN_APP_NAME;
 
   const handleLogout = () => {
-    // In a real app, clear session/token here
-    router.push('/login'); // Redirect to main login page
+    router.push('/login'); 
   };
 
   const sidebarContent = (
@@ -55,6 +56,7 @@ export default function AdminAppLayout({
                   asChild
                   isActive={pathname.startsWith(item.href)}
                   tooltip={{ children: item.title, side: 'right', align: 'center' }}
+                  onClick={() => isMobile && setSidebarOpen(false)} // Close mobile sidebar on item click
                 >
                   <Link href={item.href} className="flex items-center gap-3">
                     <item.icon className="h-5 w-5" />
@@ -84,25 +86,31 @@ export default function AdminAppLayout({
   if (isMobile) {
     return (
       <div className="flex min-h-screen w-full flex-col">
-        <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 sm:px-6 z-30">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button size="icon" variant="outline" className="sm:hidden">
-                <PanelLeft className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="sm:max-w-xs p-0">
-              <nav className="grid gap-6 text-lg font-medium h-full flex flex-col">
-                {sidebarContent}
-              </nav>
-            </SheetContent>
-          </Sheet>
-          <Link href="/admin/billing" className="flex items-center gap-2 text-lg font-semibold md:text-base">
-             <ShieldCheck className="h-6 w-6 text-primary" />
-             <span className="sr-only">{ADMIN_APP_NAME}</span>
-          </Link>
-           <h1 className="font-semibold text-lg ml-4">{pageTitle}</h1>
+        <header className="sticky top-0 flex h-16 items-center justify-between gap-4 border-b bg-background px-4 sm:px-6 z-30">
+          <div className="flex items-center gap-2">
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild>
+                <Button size="icon" variant="outline" className="sm:hidden">
+                  <PanelLeft className="h-5 w-5" />
+                  <span className="sr-only">Toggle Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="sm:max-w-xs p-0">
+                <nav className="grid gap-6 text-lg font-medium h-full flex flex-col">
+                  {sidebarContent}
+                </nav>
+              </SheetContent>
+            </Sheet>
+            <Link href="/admin/billing" className="flex items-center gap-2 text-lg font-semibold md:text-base">
+              <ShieldCheck className="h-6 w-6 text-primary" />
+              <span className="sr-only">{ADMIN_APP_NAME}</span>
+            </Link>
+             <h1 className="font-semibold text-lg ml-2 hidden sm:block">{pageTitle}</h1>
+          </div>
+           <div className="flex items-center gap-2">
+            <NotificationBell userId={currentAdminId} />
+            {/* Add user menu or other header items here for admin */}
+          </div>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
           {children}
@@ -119,7 +127,10 @@ export default function AdminAppLayout({
         <div className="flex flex-1 flex-col">
           <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 justify-between">
              <h1 className="font-semibold text-xl">{pageTitle}</h1>
-             {/* Add user menu or other header items here for admin */}
+             <div className="flex items-center gap-2">
+               <NotificationBell userId={currentAdminId} />
+               {/* Add user menu or other header items here for admin */}
+             </div>
           </header>
           <SidebarInset>
             <main className="flex-1 p-4 md:p-6 overflow-auto">

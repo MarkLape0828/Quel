@@ -94,7 +94,7 @@ export interface User {
   role: UserRole;
   firstName: string;
   lastName: string;
-  contactNumber?: string; // Added contact number
+  contactNumber?: string;
   isArchived?: boolean; 
   propertyId?: string; 
   propertyAddress?: string; 
@@ -114,4 +114,18 @@ export interface DirectoryContact {
   email?: string;
   socialMediaLinks?: SocialMediaLink[];
   notes?: string; // e.g., "Office Hours: Mon-Fri 9 AM - 5 PM"
+}
+
+// Notification System Types
+export type NotificationType = 'billing' | 'announcement' | 'service_request' | 'document_comment' | 'general';
+
+export interface Notification {
+  id: string;
+  userId: string; // ID of the user this notification is for
+  title: string;
+  message: string;
+  type: NotificationType;
+  link?: string; // Optional link to navigate to when clicked
+  isRead: boolean;
+  createdAt: string; // ISO string format
 }
