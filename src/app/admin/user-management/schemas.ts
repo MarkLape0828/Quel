@@ -1,4 +1,3 @@
-"use server";
 
 import { z } from "zod";
 import { USER_ROLES } from "@/lib/mock-data";
