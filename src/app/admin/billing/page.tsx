@@ -1,25 +1,28 @@
 "use client"; 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button"; // Added Button
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { mockAdminBillingList } from "@/lib/mock-data";
 import type { BillingInfo } from "@/lib/types";
-import { Users, Home, DollarSign, BarChartHorizontalBig, Send } from "lucide-react"; // Added Send icon
-import { sendBillingReminder } from '@/lib/notification-actions'; // Action to send reminder
-import { useToast } from '@/hooks/use-toast'; // For feedback
+import { Users, Home, DollarSign, BarChartHorizontalBig, Send, Eye } from "lucide-react";
+import { sendBillingReminder } from '@/lib/notification-actions'; 
+import { useToast } from '@/hooks/use-toast';
+import { ResidentBillingDetailsModal } from './components/resident-billing-details-modal';
 
 function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
 
 export default function AdminBillingPage() {
-  // For a real app, this would be fetched, perhaps with useState and useEffect
   const billingList: BillingInfo[] = mockAdminBillingList;
   const { toast } = useToast();
   const [sendingReminderId, setSendingReminderId] = useState<string | null>(null);
+  const [selectedBillingInfo, setSelectedBillingInfo] = useState<BillingInfo | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const handleSendReminder = async (billingInfo: BillingInfo) => {
     setSendingReminderId(billingInfo.id);
@@ -53,13 +56,22 @@ export default function AdminBillingPage() {
     }
   };
 
+  const handleViewDetails = (billingInfo: BillingInfo) => {
+    setSelectedBillingInfo(billingInfo);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedBillingInfo(null);
+  };
 
   return (
     <div className="space-y-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center"><Users className="mr-2 h-6 w-6 text-primary" /> Billing Management</CardTitle>
-          <CardDescription>Overview of all resident billing information and payment progress. Send payment reminders.</CardDescription>
+          <CardDescription>Overview of all resident billing information and payment progress. Click on a row to view details. Send payment reminders.</CardDescription>
         </CardHeader>
         <CardContent>
           {billingList.length === 0 ? (
@@ -85,14 +97,17 @@ export default function AdminBillingPage() {
                   const progressPercentage = (billingInfo.paymentsMade / billingInfo.totalPayments) * 100;
                   
                   const isPaidOff = billingInfo.paymentsMade >= billingInfo.totalPayments;
-                  const dueDate = new Date(billingInfo.nextDueDate + 'T00:00:00'); // Ensure it's parsed as local, not UTC
+                  const dueDate = new Date(billingInfo.nextDueDate + 'T00:00:00'); 
                   const today = new Date();
-                  today.setHours(0,0,0,0); // Compare dates only
+                  today.setHours(0,0,0,0); 
                   const isOverdue = !isPaidOff && dueDate < today;
 
-
                   return (
-                    <TableRow key={billingInfo.id}>
+                    <TableRow 
+                        key={billingInfo.id} 
+                        onClick={() => handleViewDetails(billingInfo)} 
+                        className="cursor-pointer hover:bg-muted/50 transition-colors"
+                    >
                       <TableCell className="font-medium">{billingInfo.userName || billingInfo.userId}</TableCell>
                       <TableCell>{billingInfo.propertyAddress}</TableCell>
                       <TableCell className="text-right">{formatCurrency(billingInfo.monthlyPayment)}</TableCell>
@@ -117,11 +132,19 @@ export default function AdminBillingPage() {
                         )}
                       </TableCell>
                       <TableCell className="text-right">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={(e) => { e.stopPropagation(); handleViewDetails(billingInfo); }}
+                          className="mr-1"
+                        >
+                          <Eye className="mr-1.5 h-3.5 w-3.5" /> View
+                        </Button>
                         {!isPaidOff && (
                           <Button 
                             variant="outline" 
                             size="sm" 
-                            onClick={() => handleSendReminder(billingInfo)}
+                            onClick={(e) => { e.stopPropagation(); handleSendReminder(billingInfo); }}
                             disabled={sendingReminderId === billingInfo.id}
                           >
                             <Send className="mr-1.5 h-3.5 w-3.5" />
@@ -136,7 +159,20 @@ export default function AdminBillingPage() {
             </Table>
           )}
         </CardContent>
+         {billingList.length > 0 && (
+            <CardFooter>
+                <p className="text-xs text-muted-foreground">Showing {billingList.length} billing records. Click a row to see full details.</p>
+            </CardFooter>
+        )}
       </Card>
+
+      {selectedBillingInfo && (
+        <ResidentBillingDetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={handleCloseDetailsModal}
+          billingInfo={selectedBillingInfo}
+        />
+      )}
     </div>
   );
 }
