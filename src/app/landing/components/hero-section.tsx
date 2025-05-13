@@ -40,7 +40,7 @@ export default function HeroSection() {
           <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg">
             Discover Homes
           </Button>
-          <Button variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-3 text-lg">
+          <Button variant="outline" size="lg" className="border-white text-white bg-transparent hover:bg-white/10 hover:text-white px-8 py-3 text-lg">
             Schedule a Tour
           </Button>
         </div>
@@ -48,3 +48,4 @@ export default function HeroSection() {
     </section>
   );
 }
+
