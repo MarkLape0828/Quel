@@ -34,7 +34,7 @@ export default function AdminAppLayout({
   const pageTitle = AdminPageTitles[pathname] || ADMIN_APP_NAME;
 
   const handleLogout = () => {
-    router.push('/login'); 
+    router.push('/landing'); // Changed from /login to /landing
   };
 
   const sidebarContent = (

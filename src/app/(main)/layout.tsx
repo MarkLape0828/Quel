@@ -35,7 +35,7 @@ export default function MainAppLayout({
   const pageTitle = PageTitles[pathname] || APP_NAME;
 
   const handleLogout = () => {
-    router.push('/login');
+    router.push('/landing'); // Changed from /login to /landing
   };
 
   const sidebarContent = (
