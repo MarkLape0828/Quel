@@ -1,4 +1,3 @@
-
 "use client"; 
 
 import React, { useState, useEffect, useMemo } from 'react';
@@ -13,7 +12,7 @@ import { getDocumentsForUserOrGeneral } from '@/lib/document-actions';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { DocumentComments } from './components/document-comments';
 import { mockUsers } from '@/lib/mock-data'; 
-import { FormItem, FormLabel } from '@/components/ui/form'; // Added FormItem and FormLabel
+import { Label } from '@/components/ui/label'; // Changed import for basic Label
 
 const DOCUMENT_TYPES: Array<DocumentItem['type'] | 'all'> = ['all', 'guideline', 'minutes', 'form', 'report', 'user-specific'];
 const DOCUMENT_TYPE_LABELS: Record<DocumentItem['type'] | 'all', string> = {
@@ -88,12 +87,12 @@ export default function DocumentsPage() {
               <CardTitle className="text-lg flex items-center"><FilterIcon className="mr-2 h-4 w-4 text-primary" /> Filter Your Documents</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormItem>
-                <FormLabel htmlFor="userFilterName">Document Name</FormLabel>
+              <div className="space-y-2">
+                <Label htmlFor="userFilterName">Document Name</Label>
                 <Input id="userFilterName" placeholder="Search by name..." value={filterName} onChange={(e) => setFilterName(e.target.value)} />
-              </FormItem>
-              <FormItem>
-                <FormLabel htmlFor="userFilterType">Document Type</FormLabel>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="userFilterType">Document Type</Label>
                 <Select value={filterType} onValueChange={(value) => setFilterType(value as DocumentItem['type'] | 'all')}>
                   <SelectTrigger id="userFilterType"><SelectValue placeholder="Select type" /></SelectTrigger>
                   <SelectContent>
@@ -102,7 +101,7 @@ export default function DocumentsPage() {
                     ))}
                   </SelectContent>
                 </Select>
-              </FormItem>
+              </div>
             </CardContent>
           </Card>
 

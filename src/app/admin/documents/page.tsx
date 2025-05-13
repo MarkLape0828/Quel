@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
@@ -22,12 +21,13 @@ import {
 } from "@/components/ui/dialog";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"; // FormItem and FormLabel are used by AddDocumentDialog
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AddDocumentSchema, type AddDocumentFormValues } from '@/lib/schemas/document-schemas';
 import { DocumentComments } from '@/app/(main)/documents/components/document-comments'; // Re-use component
 import { mockUsers } from '@/lib/mock-data'; // For admin user details
+import { Label } from "@/components/ui/label"; // Import basic Label for filters
 
 const DOCUMENT_TYPES: Array<DocumentItem['type'] | 'all'> = ['all', 'guideline', 'minutes', 'form', 'report', 'user-specific'];
 const DOCUMENT_TYPE_LABELS: Record<DocumentItem['type'] | 'all', string> = {
@@ -216,12 +216,12 @@ export default function AdminDocumentsPage() {
           <CardTitle className="flex items-center"><FilterIcon className="mr-2 h-5 w-5 text-primary" /> Filter Documents</CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <FormItem>
-            <FormLabel htmlFor="filterName">Document Name</FormLabel>
+          <div className="space-y-2">
+            <Label htmlFor="filterName">Document Name</Label>
             <Input id="filterName" placeholder="Search by name..." value={filterName} onChange={(e) => setFilterName(e.target.value)} />
-          </FormItem>
-          <FormItem>
-            <FormLabel htmlFor="filterType">Document Type</FormLabel>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="filterType">Document Type</Label>
             <Select value={filterType} onValueChange={(value) => setFilterType(value as DocumentItem['type'] | 'all')}>
               <SelectTrigger id="filterType"><SelectValue placeholder="Select type" /></SelectTrigger>
               <SelectContent>
@@ -230,11 +230,11 @@ export default function AdminDocumentsPage() {
                 ))}
               </SelectContent>
             </Select>
-          </FormItem>
-          <FormItem>
-            <FormLabel htmlFor="filterUserId">Target User ID / General</FormLabel>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="filterUserId">Target User ID / General</Label>
             <Input id="filterUserId" placeholder="Search by user ID (e.g. user123, hoa_general)" value={filterUserId} onChange={(e) => setFilterUserId(e.target.value)} />
-          </FormItem>
+          </div>
         </CardContent>
       </Card>
 
