@@ -34,6 +34,7 @@ export function ProfileForm({ user, onProfileUpdate }: ProfileFormProps) {
       firstName: user.firstName || "",
       lastName: user.lastName || "",
       email: user.email || "",
+      contactNumber: user.contactNumber || "",
     },
   });
 
@@ -49,7 +50,7 @@ export function ProfileForm({ user, onProfileUpdate }: ProfileFormProps) {
         description: "Your profile information has been successfully updated.",
       });
       onProfileUpdate(result.user); // Notify parent component of update
-      form.reset(result.user); // Reset form with new values
+      form.reset(result.user as ProfileFormValues); // Reset form with new values
     } else {
       toast({
         title: "Update Failed",
@@ -105,6 +106,19 @@ export function ProfileForm({ user, onProfileUpdate }: ProfileFormProps) {
               <FormLabel>Email Address</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="name@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="contactNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact Number (Optional)</FormLabel>
+              <FormControl>
+                <Input type="tel" placeholder="(555) 123-4567" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

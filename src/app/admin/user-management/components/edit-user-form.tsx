@@ -38,6 +38,7 @@ export function EditUserForm({ user, onSuccess }: EditUserFormProps) {
       lastName: user.lastName || "",
       email: user.email || "",
       role: user.role || undefined,
+      contactNumber: user.contactNumber || "",
       propertyId: user.propertyId || "",
       propertyAddress: user.propertyAddress || "",
     },
@@ -114,6 +115,19 @@ export function EditUserForm({ user, onSuccess }: EditUserFormProps) {
               <FormLabel>Email Address</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="name@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="contactNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact Number (Optional)</FormLabel>
+              <FormControl>
+                <Input type="tel" placeholder="(555) 123-4567" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

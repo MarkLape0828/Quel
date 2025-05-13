@@ -13,6 +13,10 @@ const UpdateUserProfileDataSchema = z.object({
   firstName: z.string().min(1, "First name is required."),
   lastName: z.string().min(1, "Last name is required."),
   email: z.string().email("Invalid email address."),
+  contactNumber: z.string().optional()
+  .refine(val => !val || /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(val), {
+    message: "Invalid phone number format."
+  }),
   // Add other editable fields here if necessary
 });
 type UpdateUserProfileData = z.infer<typeof UpdateUserProfileDataSchema>;
@@ -47,6 +51,7 @@ export async function updateUserProfile(
       firstName: validatedData.firstName,
       lastName: validatedData.lastName,
       email: validatedData.email,
+      contactNumber: validatedData.contactNumber,
       // Do not update role, propertyId, propertyAddress here unless intended for this action
     };
     

@@ -94,7 +94,24 @@ export interface User {
   role: UserRole;
   firstName: string;
   lastName: string;
-  isArchived?: boolean; // Added for archiving users
-  propertyId?: string; // Assigned property ID for HOA members
-  propertyAddress?: string; // Assigned property address for HOA members
+  contactNumber?: string; // Added contact number
+  isArchived?: boolean; 
+  propertyId?: string; 
+  propertyAddress?: string; 
+}
+
+// Contact Directory Types
+export interface SocialMediaLink {
+  platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'website' | string; // string for other custom platforms
+  url: string;
+  displayText?: string; // Optional: "Follow us on Facebook" vs just "Facebook"
+}
+export interface DirectoryContact {
+  id: string;
+  name: string; // e.g., "HOA Office", "Security Guard Post"
+  department: string; // e.g., "Administration", "Security", "Maintenance"
+  phoneNumber?: string;
+  email?: string;
+  socialMediaLinks?: SocialMediaLink[];
+  notes?: string; // e.g., "Office Hours: Mon-Fri 9 AM - 5 PM"
 }

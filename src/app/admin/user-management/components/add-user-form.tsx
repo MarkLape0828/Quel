@@ -1,3 +1,4 @@
+
 "use client";
 
 import React from "react";
@@ -37,6 +38,7 @@ export function AddUserForm({ onSuccess }: AddUserFormProps) {
       email: "",
       password: "",
       role: undefined,
+      contactNumber: "",
     },
   });
 
@@ -107,6 +109,19 @@ export function AddUserForm({ onSuccess }: AddUserFormProps) {
               <FormLabel>Email Address</FormLabel>
               <FormControl>
                 <Input type="email" placeholder="name@example.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="contactNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contact Number (Optional)</FormLabel>
+              <FormControl>
+                <Input type="tel" placeholder="(555) 123-4567" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

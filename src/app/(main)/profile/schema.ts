@@ -5,6 +5,10 @@ export const ProfileSchema = z.object({
   firstName: z.string().min(1, "First name is required."),
   lastName: z.string().min(1, "Last name is required."),
   email: z.string().email("Invalid email address."),
+  contactNumber: z.string().optional()
+    .refine(val => !val || /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(val), {
+      message: "Invalid phone number format."
+    }),
   // Password change could be a separate field/schema if needed
   // currentPassword: z.string().optional(),
   // newPassword: z.string().min(8, "New password must be at least 8 characters.").optional(),

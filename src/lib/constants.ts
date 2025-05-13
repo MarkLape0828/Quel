@@ -11,7 +11,9 @@ import {
   FolderKanban,
   UserCog, 
   LogOut, 
-  IdCard, // Added for Profile
+  IdCard,
+  BookUser, // For admin manage contacts
+  ListChecks, // For user contact directory
 } from 'lucide-react';
 
 export const APP_NAME = "The Quel";
@@ -43,6 +45,11 @@ export const NAV_ITEMS: NavItem[] = [
     icon: CreditCard,
   },
   {
+    title: 'Contact Directory',
+    href: '/contact-directory',
+    icon: ListChecks,
+  },
+  {
     title: 'Profile',
     href: '/profile',
     icon: IdCard,
@@ -55,6 +62,7 @@ export const PageTitles: Record<string, string> = {
   '/service-requests': 'Service Requests',
   '/event-calendar': 'Event Calendar',
   '/billing': 'My Billing',
+  '/contact-directory': 'Contact Directory',
   '/profile': 'My Profile',
   // Auth Pages
   '/login': 'Login',
@@ -87,6 +95,11 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     icon: FolderKanban,
   },
   {
+    title: 'Manage Contacts',
+    href: '/admin/contact-directory',
+    icon: BookUser,
+  },
+  {
     title: 'My Profile',
     href: '/admin/profile',
     icon: IdCard,
@@ -98,6 +111,7 @@ export const AdminPageTitles: Record<string, string> = {
   '/admin/user-management': 'User Management',
   '/admin/service-requests': 'Manage Service Requests',
   '/admin/documents': 'Manage Documents',
+  '/admin/contact-directory': 'Manage Contact Directory',
   '/admin/profile': 'My Admin Profile',
   // Admin Auth Pages (if separate, otherwise uses main PageTitles)
   '/admin/login': 'Admin Login',

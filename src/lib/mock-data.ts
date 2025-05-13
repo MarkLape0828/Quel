@@ -1,4 +1,4 @@
-import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment } from './types';
+import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {
   if (annualInterestRate === 0) {
@@ -231,13 +231,55 @@ export let mockDocuments: DocumentItem[] = [
 
 // Mock Users for User Management
 export let mockUsers: User[] = [
-  { id: 'admin001', email: 'admin@example.com', firstName: 'Site', lastName: 'Admin', role: 'admin', isArchived: false },
-  { id: 'user001', email: 'user@example.com', firstName: 'Regular', lastName: 'User', role: 'hoa', isArchived: false, propertyId: "P101", propertyAddress: "101 Blossom Lane, The Quel" },
-  { id: 'user002', email: 'staff@example.com', firstName: 'Jane', lastName: 'Staff', role: 'staff', isArchived: false },
-  { id: 'user003', email: 'utility@example.com', firstName: 'Utility', lastName: 'Person', role: 'utility', isArchived: false },
-  { id: 'user123', email: 'member1@example.com', firstName: 'Alice', lastName: 'Member', role: 'hoa', isArchived: false, propertyId: "P102", propertyAddress: "123 Main St, Anytown, USA"},
-  { id: 'user456', email: 'member2@example.com', firstName: 'Bob', lastName: 'Homeowner', role: 'hoa', isArchived: false, propertyId: "P103", propertyAddress: "456 Oak Ave, Anytown, USA" },
-  { id: 'user789', email: 'robert.johnson@example.com', firstName: 'Robert', lastName: 'Johnson', role: 'hoa', isArchived: false, propertyId: "P104", propertyAddress: "789 Pine Rd, The Quel"},
+  { id: 'admin001', email: 'admin@example.com', firstName: 'Site', lastName: 'Admin', role: 'admin', contactNumber: '555-0100', isArchived: false },
+  { id: 'user001', email: 'user@example.com', firstName: 'Regular', lastName: 'User', role: 'hoa', contactNumber: '555-0101', isArchived: false, propertyId: "P101", propertyAddress: "101 Blossom Lane, The Quel" },
+  { id: 'user002', email: 'staff@example.com', firstName: 'Jane', lastName: 'Staff', role: 'staff', contactNumber: '555-0102', isArchived: false },
+  { id: 'user003', email: 'utility@example.com', firstName: 'Utility', lastName: 'Person', role: 'utility', contactNumber: '555-0103', isArchived: false },
+  { id: 'user123', email: 'member1@example.com', firstName: 'Alice', lastName: 'Member', role: 'hoa', contactNumber: '555-0104', isArchived: false, propertyId: "P102", propertyAddress: "123 Main St, Anytown, USA"},
+  { id: 'user456', email: 'member2@example.com', firstName: 'Bob', lastName: 'Homeowner', role: 'hoa', contactNumber: '555-0105', isArchived: false, propertyId: "P103", propertyAddress: "456 Oak Ave, Anytown, USA" },
+  { id: 'user789', email: 'robert.johnson@example.com', firstName: 'Robert', lastName: 'Johnson', role: 'hoa', contactNumber: '555-0106', isArchived: false, propertyId: "P104", propertyAddress: "789 Pine Rd, The Quel"},
 ];
 
 export const USER_ROLES: UserRole[] = ['admin', 'hoa', 'staff', 'utility'];
+
+// Mock Contact Directory Data
+export let mockDirectoryContacts: DirectoryContact[] = [
+  {
+    id: "contact-hoa-office",
+    name: "The Quel HOA Office",
+    department: "Administration",
+    phoneNumber: "(555) 100-2000",
+    email: "hoaoffice@thequel.com",
+    socialMediaLinks: [
+      { platform: "website", url: "https://www.thequel.com", displayText: "Official Website"},
+      { platform: "facebook", url: "https://facebook.com/thequelhoa" }
+    ],
+    notes: "Office Hours: Monday - Friday, 9 AM - 5 PM. For general inquiries and community information."
+  },
+  {
+    id: "contact-security",
+    name: "The Quel Security Dispatch",
+    department: "Security",
+    phoneNumber: "(555) 100-2001",
+    email: "security@thequel.com",
+    notes: "24/7 Dispatch. For emergencies, please dial 911 first."
+  },
+  {
+    id: "contact-maintenance",
+    name: "The Quel Maintenance Team",
+    department: "Maintenance",
+    phoneNumber: "(555) 100-2002",
+    email: "maintenance@thequel.com",
+    socialMediaLinks: [
+      { platform: "twitter", url: "https://twitter.com/thequelmaintenance" }
+    ],
+    notes: "For common area maintenance requests. Submit service requests via the portal for property-specific issues."
+  },
+  {
+    id: "contact-events",
+    name: "Community Events Coordinator",
+    department: "Community Engagement",
+    email: "events@thequel.com",
+    notes: "For information about upcoming community events and hall bookings."
+  }
+];

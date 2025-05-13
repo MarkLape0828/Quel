@@ -55,7 +55,11 @@ export async function addUser(
 
     const newUser: User = {
       id: `user-${Date.now()}`,
-      ...validatedData,
+      firstName: validatedData.firstName,
+      lastName: validatedData.lastName,
+      email: validatedData.email,
+      role: validatedData.role,
+      contactNumber: validatedData.contactNumber,
       isArchived: false, 
       // In a real app, password would be hashed here
     };
@@ -90,13 +94,11 @@ export async function updateUser(
 
     mockUsers[userIndex] = {
       ...mockUsers[userIndex],
-      ...validatedData, // This will overwrite firstName, lastName, email, role
-      // Explicitly handle propertyId and propertyAddress based on role
+      ...validatedData, // This will overwrite firstName, lastName, email, role, contactNumber
       propertyId: validatedData.role === 'hoa' ? validatedData.propertyId : undefined,
       propertyAddress: validatedData.role === 'hoa' ? validatedData.propertyAddress : undefined,
     };
     
-    // If role is changed away from 'hoa', clear property info
     if (validatedData.role !== 'hoa') {
         mockUsers[userIndex].propertyId = undefined;
         mockUsers[userIndex].propertyAddress = undefined;

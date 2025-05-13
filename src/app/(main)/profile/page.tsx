@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from '@/components/ui/badge';
-import { IdCard, Home, Mail, UserCircle } from "lucide-react";
+import { IdCard, Home, Mail, UserCircle, Phone } from "lucide-react";
 import type { User } from "@/lib/types";
 import { getCurrentUserData } from "./actions";
 import { ProfileForm } from "./components/profile-form";
@@ -104,6 +104,12 @@ export default function ProfilePage() {
                 <p className="text-muted-foreground">Email Address</p>
                 <p className="font-medium flex items-center">
                   <Mail className="mr-2 h-4 w-4 text-muted-foreground" /> {currentUser.email}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-muted-foreground">Contact Number</p>
+                <p className="font-medium flex items-center">
+                  <Phone className="mr-2 h-4 w-4 text-muted-foreground" /> {currentUser.contactNumber || "Not provided"}
                 </p>
               </div>
               <div className="space-y-1">

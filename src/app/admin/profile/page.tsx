@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from '@/components/ui/badge';
-import { IdCard, Mail, ShieldCheck, UserCircle } from "lucide-react"; // ShieldCheck for admin role
+import { IdCard, Mail, ShieldCheck, UserCircle, Phone } from "lucide-react"; // ShieldCheck for admin role
 import type { User } from "@/lib/types";
 import { getCurrentUserData } from "@/app/(main)/profile/actions"; // Reuse user action
 import { ProfileForm } from "@/app/(main)/profile/components/profile-form"; // Reuse profile form
@@ -105,6 +105,12 @@ export default function AdminProfilePage() {
                 <p className="text-muted-foreground">Email Address</p>
                 <p className="font-medium flex items-center">
                   <Mail className="mr-2 h-4 w-4 text-muted-foreground" /> {currentAdmin.email}
+                </p>
+              </div>
+              <div className="space-y-1">
+                <p className="text-muted-foreground">Contact Number</p>
+                <p className="font-medium flex items-center">
+                  <Phone className="mr-2 h-4 w-4 text-muted-foreground" /> {currentAdmin.contactNumber || "Not provided"}
                 </p>
               </div>
               <div className="space-y-1">
