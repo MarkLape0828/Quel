@@ -1,10 +1,9 @@
 
 import { z } from "zod";
 
-// Re-exporting from lib/contact-directory-actions.ts to keep admin-specific schemas here if needed in future
-// or if they diverge. For now, they are the same.
-export { DirectoryContactSchema } from "@/lib/contact-directory-actions";
-export type { DirectoryContactFormValues } from "@/lib/contact-directory-actions";
+// Re-exporting from the new central schema definition file
+export { DirectoryContactSchema } from "@/lib/schemas/contact-directory-schemas";
+export type { DirectoryContactFormValues } from "@/lib/schemas/contact-directory-schemas";
 
 // Example of an admin-specific schema if it were different:
 // export const AdminDirectoryContactSchema = DirectoryContactSchema.extend({
