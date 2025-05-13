@@ -12,9 +12,9 @@ interface LandingHeaderProps {
 export default function LandingHeader({ onSignInClick }: LandingHeaderProps) {
   const navItems = [
     { name: 'Home', href: '/landing' },
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Listings', href: '#' },
+    { name: 'About', href: '/landing/about' }, // Updated
+    { name: 'Blog', href: '/landing/blog' },   // Updated
+    { name: 'Listings', href: '/landing/listings' }, // Updated
   ];
 
   return (
