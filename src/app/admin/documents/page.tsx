@@ -1,15 +1,15 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { DocumentItem } from "@/lib/types";
+import type { DocumentItem, User } from "@/lib/types";
 import { addDocument, deleteDocument, getAllDocuments } from '@/lib/document-actions';
 import { useToast } from '@/hooks/use-toast';
-import { Download, FileText, FileArchive, FileBarChart, Trash2, PlusCircle, UserSquare2 } from "lucide-react";
+import { Download, FileText, FileArchive, FileBarChart, Trash2, PlusCircle, UserSquare2, MessageSquare, Filter as FilterIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +26,18 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AddDocumentSchema, type AddDocumentFormValues } from '@/lib/schemas/document-schemas';
+import { DocumentComments } from '@/app/(main)/documents/components/document-comments'; // Re-use component
+import { mockUsers } from '@/lib/mock-data'; // For admin user details
+
+const DOCUMENT_TYPES: Array<DocumentItem['type'] | 'all'> = ['all', 'guideline', 'minutes', 'form', 'report', 'user-specific'];
+const DOCUMENT_TYPE_LABELS: Record<DocumentItem['type'] | 'all', string> = {
+  all: 'All Types',
+  guideline: 'Guideline',
+  minutes: 'Minutes',
+  form: 'Form',
+  report: 'Report',
+  'user-specific': 'User Specific',
+};
 
 const getIconForType = (type: DocumentItem["type"]) => {
   switch (type) {
@@ -49,7 +61,7 @@ function AddDocumentDialog({ onDocumentAdded }: { onDocumentAdded: () => void })
       name: "",
       type: undefined,
       userId: "",
-      url: "", // Will be auto-generated or placeholder
+      url: "", 
       size: "N/A",
     },
   });
@@ -101,11 +113,9 @@ function AddDocumentDialog({ onDocumentAdded }: { onDocumentAdded: () => void })
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl><SelectTrigger><SelectValue placeholder="Select document type" /></SelectTrigger></FormControl>
                   <SelectContent>
-                    <SelectItem value="guideline">Guideline</SelectItem>
-                    <SelectItem value="minutes">Minutes</SelectItem>
-                    <SelectItem value="form">Form</SelectItem>
-                    <SelectItem value="report">Report</SelectItem>
-                    <SelectItem value="user-specific">User Specific</SelectItem>
+                    {DOCUMENT_TYPES.filter(t => t !== 'all').map(type => (
+                      <SelectItem key={type} value={type}>{DOCUMENT_TYPE_LABELS[type]}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -142,6 +152,15 @@ export default function AdminDocumentsPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
+  
+  const [filterName, setFilterName] = useState('');
+  const [filterType, setFilterType] = useState<DocumentItem['type'] | 'all'>('all');
+  const [filterUserId, setFilterUserId] = useState('');
+
+  const [selectedDocForComments, setSelectedDocForComments] = useState<DocumentItem | null>(null);
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
+  
+  const adminUser = mockUsers.find(u => u.role === 'admin') || mockUsers[0]; // Mock admin user
 
   const fetchDocuments = useCallback(async () => {
     setIsLoading(true);
@@ -154,6 +173,13 @@ export default function AdminDocumentsPage() {
     fetchDocuments();
   }, [fetchDocuments]);
 
+  const filteredDocuments = useMemo(() => {
+    return documents
+      .filter(doc => filterName === '' || doc.name.toLowerCase().includes(filterName.toLowerCase()))
+      .filter(doc => filterType === 'all' || doc.type === filterType)
+      .filter(doc => filterUserId === '' || doc.userId.toLowerCase().includes(filterUserId.toLowerCase()));
+  }, [documents, filterName, filterType, filterUserId]);
+
   const handleDeleteDocument = async (docId: string, docName: string) => {
     if (!confirm(`Are you sure you want to delete "${docName}"? This action cannot be undone.`)) {
       return;
@@ -161,14 +187,57 @@ export default function AdminDocumentsPage() {
     const result = await deleteDocument(docId);
     if (result.success) {
       toast({ title: "Success", description: result.message });
-      fetchDocuments(); // Refresh list
+      fetchDocuments(); 
     } else {
       toast({ title: "Error", description: result.message, variant: "destructive" });
     }
   };
 
+  const handleOpenCommentsModal = (doc: DocumentItem) => {
+    setSelectedDocForComments(doc);
+    setIsCommentsModalOpen(true);
+  };
+
+  const handleCommentAdded = (updatedDocument: DocumentItem) => {
+    // Refresh the specific document in the list to update comment count, or re-fetch all
+    setDocuments(prevDocs => 
+      prevDocs.map(doc => doc.id === updatedDocument.id ? updatedDocument : doc)
+    );
+    // If the currently selected doc for comments is the one updated, refresh its state
+    if (selectedDocForComments && selectedDocForComments.id === updatedDocument.id) {
+      setSelectedDocForComments(updatedDocument);
+    }
+  };
+
   return (
     <div className="space-y-6">
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center"><FilterIcon className="mr-2 h-5 w-5 text-primary" /> Filter Documents</CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <FormItem>
+            <FormLabel htmlFor="filterName">Document Name</FormLabel>
+            <Input id="filterName" placeholder="Search by name..." value={filterName} onChange={(e) => setFilterName(e.target.value)} />
+          </FormItem>
+          <FormItem>
+            <FormLabel htmlFor="filterType">Document Type</FormLabel>
+            <Select value={filterType} onValueChange={(value) => setFilterType(value as DocumentItem['type'] | 'all')}>
+              <SelectTrigger id="filterType"><SelectValue placeholder="Select type" /></SelectTrigger>
+              <SelectContent>
+                {DOCUMENT_TYPES.map(type => (
+                  <SelectItem key={type} value={type}>{DOCUMENT_TYPE_LABELS[type]}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </FormItem>
+          <FormItem>
+            <FormLabel htmlFor="filterUserId">Target User ID / General</FormLabel>
+            <Input id="filterUserId" placeholder="Search by user ID (e.g. user123, hoa_general)" value={filterUserId} onChange={(e) => setFilterUserId(e.target.value)} />
+          </FormItem>
+        </CardContent>
+      </Card>
+
       <Card className="shadow-lg">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
@@ -180,8 +249,8 @@ export default function AdminDocumentsPage() {
         <CardContent>
           {isLoading ? (
             <p>Loading documents...</p>
-          ) : documents.length === 0 ? (
-            <p className="text-muted-foreground">No documents found.</p>
+          ) : filteredDocuments.length === 0 ? (
+            <p className="text-muted-foreground">No documents found matching your filters.</p>
           ) : (
             <Table>
               <TableHeader>
@@ -191,12 +260,12 @@ export default function AdminDocumentsPage() {
                   <TableHead>Target (User ID)</TableHead>
                   <TableHead>Uploaded</TableHead>
                   <TableHead>Uploaded By</TableHead>
-                  <TableHead>Size</TableHead>
+                  <TableHead>Comments</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {documents.map((doc) => (
+                {filteredDocuments.map((doc) => (
                   <TableRow key={doc.id}>
                     <TableCell>{getIconForType(doc.type)}</TableCell>
                     <TableCell className="font-medium max-w-xs truncate" title={doc.name}>{doc.name}</TableCell>
@@ -207,11 +276,14 @@ export default function AdminDocumentsPage() {
                     </TableCell>
                     <TableCell>{new Date(doc.uploadDate).toLocaleDateString()}</TableCell>
                     <TableCell className="capitalize">{doc.uploadedBy}</TableCell>
-                    <TableCell>{doc.size || "N/A"}</TableCell>
-                    <TableCell className="text-right space-x-2">
+                    <TableCell>{doc.comments.length}</TableCell>
+                    <TableCell className="text-right space-x-1">
+                      <Button variant="outline" size="sm" onClick={() => handleOpenCommentsModal(doc)}>
+                        <MessageSquare className="mr-2 h-3 w-3" /> View
+                      </Button>
                       <Button asChild variant="outline" size="sm">
                         <a href={doc.url} download target="_blank" rel="noopener noreferrer">
-                          <Download className="mr-2 h-3 w-3" /> Download
+                          <Download className="mr-2 h-3 w-3" /> Downld
                         </a>
                       </Button>
                       <Button variant="destructive" size="sm" onClick={() => handleDeleteDocument(doc.id, doc.name)}>
@@ -224,13 +296,33 @@ export default function AdminDocumentsPage() {
             </Table>
           )}
         </CardContent>
-        {documents.length > 0 && (
+        {filteredDocuments.length > 0 && (
             <CardFooter>
-                <p className="text-xs text-muted-foreground">Showing {documents.length} documents.</p>
+                <p className="text-xs text-muted-foreground">Showing {filteredDocuments.length} of {documents.length} documents.</p>
             </CardFooter>
         )}
       </Card>
+
+      {selectedDocForComments && (
+        <Dialog open={isCommentsModalOpen} onOpenChange={setIsCommentsModalOpen}>
+          <DialogContent className="max-w-2xl"> {/* Wider modal for comments */}
+            <DialogHeader>
+              <DialogTitle>Comments for: {selectedDocForComments.name}</DialogTitle>
+              <DialogDescription>View and add comments to this document.</DialogDescription>
+            </DialogHeader>
+            <div className="py-4 max-h-[60vh] overflow-y-auto">
+              <DocumentComments 
+                document={selectedDocForComments} 
+                currentUser={adminUser} // Use mock admin user
+                onCommentAdded={handleCommentAdded}
+              />
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsCommentsModalOpen(false)}>Close</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
-

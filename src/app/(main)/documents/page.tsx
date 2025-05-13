@@ -1,15 +1,29 @@
+
 "use client"; 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, FileArchive, FileBarChart, UserSquare2, MessageSquare, ChevronDown } from "lucide-react"; // Added ChevronDown
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Download, FileText, FileArchive, FileBarChart, UserSquare2, MessageSquare, ChevronDown, Filter as FilterIcon } from "lucide-react";
 import type { DocumentItem, User } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { getDocumentsForUserOrGeneral } from '@/lib/document-actions'; 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { DocumentComments } from './components/document-comments';
-import { mockUsers } from '@/lib/mock-data'; // For mock current user
+import { mockUsers } from '@/lib/mock-data'; 
+import { FormItem, FormLabel } from '@/components/ui/form'; // Added FormItem and FormLabel
+
+const DOCUMENT_TYPES: Array<DocumentItem['type'] | 'all'> = ['all', 'guideline', 'minutes', 'form', 'report', 'user-specific'];
+const DOCUMENT_TYPE_LABELS: Record<DocumentItem['type'] | 'all', string> = {
+  all: 'All Types',
+  guideline: 'Guideline',
+  minutes: 'Minutes',
+  form: 'Form',
+  report: 'Report',
+  'user-specific': 'User Specific',
+};
 
 const getIconForType = (type: DocumentItem["type"]) => {
   switch (type) {
@@ -32,9 +46,11 @@ export default function DocumentsPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Mock current user ID and user object. In a real app, this would come from auth context.
+  const [filterName, setFilterName] = useState('');
+  const [filterType, setFilterType] = useState<DocumentItem['type'] | 'all'>('all');
+  
   const currentUserId = "user123"; 
-  const currentUser = mockUsers.find(u => u.id === currentUserId) || mockUsers[0]; // Fallback to first mock user
+  const currentUser = mockUsers.find(u => u.id === currentUserId) || mockUsers[0];
 
   useEffect(() => {
     async function loadDocuments() {
@@ -46,6 +62,12 @@ export default function DocumentsPage() {
     }
     loadDocuments();
   }, [currentUserId]);
+
+  const displayDocuments = useMemo(() => {
+    return documents
+      .filter(doc => filterName === '' || doc.name.toLowerCase().includes(filterName.toLowerCase()))
+      .filter(doc => filterType === 'all' || doc.type === filterType);
+  }, [documents, filterName, filterType]);
 
   const handleCommentAdded = (updatedDocument: DocumentItem) => {
     setDocuments(prevDocs => 
@@ -61,13 +83,36 @@ export default function DocumentsPage() {
           <CardDescription>Access important HOA documents, guidelines, meeting minutes, and forms relevant to you. Add comments and attachments.</CardDescription>
         </CardHeader>
         <CardContent>
+          <Card className="mb-6 shadow-sm border-border">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center"><FilterIcon className="mr-2 h-4 w-4 text-primary" /> Filter Your Documents</CardTitle>
+            </CardHeader>
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormItem>
+                <FormLabel htmlFor="userFilterName">Document Name</FormLabel>
+                <Input id="userFilterName" placeholder="Search by name..." value={filterName} onChange={(e) => setFilterName(e.target.value)} />
+              </FormItem>
+              <FormItem>
+                <FormLabel htmlFor="userFilterType">Document Type</FormLabel>
+                <Select value={filterType} onValueChange={(value) => setFilterType(value as DocumentItem['type'] | 'all')}>
+                  <SelectTrigger id="userFilterType"><SelectValue placeholder="Select type" /></SelectTrigger>
+                  <SelectContent>
+                    {DOCUMENT_TYPES.map(type => (
+                      <SelectItem key={type} value={type}>{DOCUMENT_TYPE_LABELS[type]}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            </CardContent>
+          </Card>
+
           {isLoading ? (
             <p>Loading documents...</p>
-          ) : documents.length === 0 ? (
-            <p className="text-muted-foreground">No documents available for you at this time.</p>
+          ) : displayDocuments.length === 0 ? (
+            <p className="text-muted-foreground">No documents available matching your filters or for you at this time.</p>
           ) : (
             <Accordion type="single" collapsible className="w-full">
-              {documents.map((doc) => (
+              {displayDocuments.map((doc) => (
                 <AccordionItem value={doc.id} key={doc.id} className="border-b-0">
                   <Card className="mb-2 overflow-hidden">
                     <Table>
@@ -93,11 +138,11 @@ export default function DocumentsPage() {
                               </a>
                             </Button>
                             <AccordionTrigger asChild>
-                               <Button variant="outline" size="sm" className="justify-between"> {/* Ensure Button can layout children */}
+                               <Button variant="outline" size="sm" className="justify-between"> 
                                 <span className="flex items-center">
                                   <MessageSquare className="mr-2 h-4 w-4" /> Comments ({doc.comments.length})
                                 </span>
-                                <ChevronDown className="h-4 w-4 shrink-0" /> {/* Add ChevronDown icon here */}
+                                <ChevronDown className="h-4 w-4 shrink-0" /> 
                                </Button>
                             </AccordionTrigger>
                           </TableCell>
@@ -119,9 +164,9 @@ export default function DocumentsPage() {
             </Accordion>
           )}
         </CardContent>
-        {documents.length > 0 && !isLoading && (
+        {displayDocuments.length > 0 && !isLoading && (
           <CardFooter>
-            <p className="text-xs text-muted-foreground">Displaying {documents.length} documents.</p>
+            <p className="text-xs text-muted-foreground">Displaying {displayDocuments.length} of {documents.length} documents.</p>
           </CardFooter>
         )}
       </Card>
