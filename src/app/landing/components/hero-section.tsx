@@ -3,10 +3,9 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { APP_NAME } from '@/lib/constants';
-import Link from 'next/link'; // Import Link
+import Link from 'next/link';
 
 interface HeroSectionProps {
-  onSignInClick: () => void; // Keep this if needed elsewhere, or remove if only used by header
   onScheduleTourClick: () => void;
 }
 
@@ -18,11 +17,12 @@ export default function HeroSection({ onScheduleTourClick }: HeroSectionProps) {
       <Image
         src="https://picsum.photos/1920/1080?grayscale&blur=2"
         alt="Modern residential area with calm waters"
-        layout="fill"
-        objectFit="cover"
+        fill
+        style={{ objectFit: 'cover' }}
         quality={80}
         className="absolute z-0"
         data-ai-hint="luxury estate sunset"
+        priority
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10" /> {/* Gradient overlay */}
       
@@ -50,7 +50,7 @@ export default function HeroSection({ onScheduleTourClick }: HeroSectionProps) {
             variant="outline" 
             size="lg" 
             className="border-white text-white bg-transparent hover:bg-white/10 hover:text-white px-8 py-3 text-lg shadow-lg backdrop-blur-sm"
-            onClick={onScheduleTourClick} // Trigger modal
+            onClick={onScheduleTourClick}
           >
             Schedule a Tour
           </Button>

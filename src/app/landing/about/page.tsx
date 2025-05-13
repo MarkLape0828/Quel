@@ -24,13 +24,13 @@ export default function AboutPage() {
                 Our journey began with a carefully selected landscape, chosen for its natural beauty and potential to foster a serene living environment. From there, every aspect of {`${APP_NAME}`} – from architectural design to amenity planning – has been thoughtfully curated to enhance the lives of our residents.
               </p>
             </div>
-            <div className="rounded-lg overflow-hidden shadow-md">
+            <div className="rounded-lg overflow-hidden shadow-md aspect-[3/2] relative">
               <Image
                 src="https://picsum.photos/600/400?grayscale"
                 alt="Founding team planning"
-                width={600}
-                height={400}
-                className="object-cover w-full h-full"
+                fill
+                style={{ objectFit: "cover" }}
+                className="w-full h-full"
                 data-ai-hint="team planning blueprints"
               />
             </div>

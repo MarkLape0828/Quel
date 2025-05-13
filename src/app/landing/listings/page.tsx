@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { MapPin, BedDouble, Bath, Car, Home, DollarSign, Filter } from "lucide-react";
+import { MapPin, BedDouble, Bath, Car, Home as HomeIcon, DollarSign, Filter } from "lucide-react"; // Renamed Home to HomeIcon
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { APP_NAME } from "@/lib/constants";
@@ -130,12 +130,12 @@ export default function ListingsPage() {
               <Image
                 src={listing.imageUrl}
                 alt={listing.title}
-                layout="fill"
-                objectFit="cover"
+                fill
+                style={{ objectFit: "cover" }}
                 data-ai-hint={listing.aiHint}
               />
               <Badge 
-                className={`absolute top-2 right-2 ${listing.status === 'Sold' ? 'bg-destructive' : listing.status === 'Pending' ? 'bg-yellow-500 text-black' : 'bg-primary'}`}
+                className={`absolute top-2 right-2 ${listing.status === 'Sold' ? 'bg-destructive' : listing.status === 'Pending' ? 'bg-yellow-500 text-black' : 'bg-primary text-primary-foreground'}`}
               >
                 {listing.status}
               </Badge>
@@ -157,7 +157,7 @@ export default function ListingsPage() {
                 <span className="flex items-center"><BedDouble className="h-4 w-4 mr-1.5 text-primary/70"/>{listing.bedrooms} Beds</span>
                 <span className="flex items-center"><Bath className="h-4 w-4 mr-1.5 text-primary/70"/>{listing.bathrooms} Baths</span>
                 <span className="flex items-center"><Car className="h-4 w-4 mr-1.5 text-primary/70"/>{listing.garage} Garage</span>
-                <span className="flex items-center"><Home className="h-4 w-4 mr-1.5 text-primary/70"/>{listing.sqft} sqft</span>
+                <span className="flex items-center"><HomeIcon className="h-4 w-4 mr-1.5 text-primary/70"/>{listing.sqft} sqft</span>
               </div>
               <div className="flex flex-wrap gap-1 pt-1">
                 {listing.tags.map(tag => (
