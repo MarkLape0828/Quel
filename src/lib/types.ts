@@ -14,6 +14,17 @@ export interface Announcement {
   author?: string;
 }
 
+export interface Comment {
+  id: string;
+  documentId: string;
+  userId: string; // ID of the user who made the comment
+  userName: string; // Name of the user for display
+  text: string;
+  date: string; // ISO string format
+  attachmentUrl?: string; // URL to the attached file
+  attachmentName?: string; // Name of the attached file
+}
+
 export interface DocumentItem {
   id: string;
   name: string;
@@ -23,6 +34,7 @@ export interface DocumentItem {
   size?: string;
   userId: string; // ID of the user this document belongs to or 'hoa_general' for HOA wide documents
   uploadedBy: 'admin' | 'user' | 'system'; // Who uploaded it
+  comments: Comment[];
 }
 
 export interface ServiceRequest {

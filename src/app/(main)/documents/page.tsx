@@ -1,18 +1,16 @@
 
 "use client"; 
-// Add "use client" if using hooks like useState, useEffect for fetching/filtering client-side
-// For server-side fetching and rendering, this might be a Server Component.
-// Given the current structure (direct usage of mockDocuments), it can be a server component.
-// However, if we were to filter by a logged-in user's ID dynamically, it might need client-side aspects or different props.
-// For simplicity with mock data, let's assume it's a server component that gets "currentUser" documents.
 
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Download, FileText, FileArchive, FileBarChart, UserSquare2 } from "lucide-react";
-import type { DocumentItem } from "@/lib/types";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { getDocumentsForUserOrGeneral } from '@/lib/document-actions'; // New action
+import { Download, FileText, FileArchive, FileBarChart, UserSquare2, MessageSquare } from "lucide-react";
+import type { DocumentItem, User } from "@/lib/types";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { getDocumentsForUserOrGeneral } from '@/lib/document-actions'; 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { DocumentComments } from './components/document-comments';
+import { mockUsers } from '@/lib/mock-data'; // For mock current user
 
 const getIconForType = (type: DocumentItem["type"]) => {
   switch (type) {
@@ -25,7 +23,7 @@ const getIconForType = (type: DocumentItem["type"]) => {
     case "report":
         return <FileBarChart className="h-5 w-5 text-primary" />;
     case "user-specific":
-        return <UserSquare2 className="h-5 w-5 text-purple-600" />; // Example for user-specific
+        return <UserSquare2 className="h-5 w-5 text-purple-600" />; 
     default:
       return <FileText className="h-5 w-5" />;
   }
@@ -34,15 +32,16 @@ const getIconForType = (type: DocumentItem["type"]) => {
 export default function DocumentsPage() {
   const [documents, setDocuments] = useState<DocumentItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [expandedDocumentId, setExpandedDocumentId] = useState<string | null>(null);
   
-  // Mock current user ID. In a real app, this would come from auth context.
+  // Mock current user ID and user object. In a real app, this would come from auth context.
   const currentUserId = "user123"; 
+  const currentUser = mockUsers.find(u => u.id === currentUserId) || mockUsers[0]; // Fallback to first mock user
 
   useEffect(() => {
     async function loadDocuments() {
       setIsLoading(true);
       const fetchedDocuments = await getDocumentsForUserOrGeneral(currentUserId);
-      // Sort by upload date, newest first
       fetchedDocuments.sort((a, b) => new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime());
       setDocuments(fetchedDocuments);
       setIsLoading(false);
@@ -50,12 +49,18 @@ export default function DocumentsPage() {
     loadDocuments();
   }, [currentUserId]);
 
+  const handleCommentAdded = (updatedDocument: DocumentItem) => {
+    setDocuments(prevDocs => 
+      prevDocs.map(doc => doc.id === updatedDocument.id ? updatedDocument : doc)
+    );
+  };
+
   return (
     <div className="space-y-6">
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle>Document Library</CardTitle>
-          <CardDescription>Access important HOA documents, guidelines, meeting minutes, and forms relevant to you.</CardDescription>
+          <CardDescription>Access important HOA documents, guidelines, meeting minutes, and forms relevant to you. Add comments and attachments.</CardDescription>
         </CardHeader>
         <CardContent>
           {isLoading ? (
@@ -63,36 +68,61 @@ export default function DocumentsPage() {
           ) : documents.length === 0 ? (
             <p className="text-muted-foreground">No documents available for you at this time.</p>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">Type</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Uploaded</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {documents.map((doc) => (
-                  <TableRow key={doc.id}>
-                    <TableCell>{getIconForType(doc.type)}</TableCell>
-                    <TableCell className="font-medium">{doc.name}</TableCell>
-                    <TableCell>{new Date(doc.uploadDate).toLocaleDateString()}</TableCell>
-                    <TableCell>{doc.size || "N/A"}</TableCell>
-                    <TableCell className="text-right">
-                      <Button asChild variant="outline" size="sm">
-                        <a href={doc.url} download target="_blank" rel="noopener noreferrer">
-                          <Download className="mr-2 h-4 w-4" /> Download
-                        </a>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <Accordion type="single" collapsible className="w-full">
+              {documents.map((doc) => (
+                <AccordionItem value={doc.id} key={doc.id} className="border-b-0">
+                  <Card className="mb-2 overflow-hidden">
+                    <Table>
+                      <TableHeader className="sr-only">
+                        <TableRow>
+                          <TableHead className="w-[60px]">Icon</TableHead>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Uploaded</TableHead>
+                          <TableHead>Size</TableHead>
+                          <TableHead className="w-[200px] text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        <TableRow className="border-b-0 hover:bg-transparent data-[state=selected]:bg-transparent">
+                          <TableCell className="w-[60px] p-3">{getIconForType(doc.type)}</TableCell>
+                          <TableCell className="font-medium p-3">{doc.name}</TableCell>
+                          <TableCell className="p-3">{new Date(doc.uploadDate).toLocaleDateString()}</TableCell>
+                          <TableCell className="p-3">{doc.size || "N/A"}</TableCell>
+                          <TableCell className="text-right space-x-2 p-3 w-[200px]">
+                            <Button asChild variant="outline" size="sm">
+                              <a href={doc.url} download target="_blank" rel="noopener noreferrer">
+                                <Download className="mr-2 h-4 w-4" /> Download
+                              </a>
+                            </Button>
+                            <AccordionTrigger asChild>
+                               <Button variant="outline" size="sm">
+                                <MessageSquare className="mr-2 h-4 w-4" /> Comments ({doc.comments.length})
+                               </Button>
+                            </AccordionTrigger>
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                    <AccordionContent className="p-0">
+                        <div className="px-4 pb-4">
+                         <DocumentComments 
+                            document={doc} 
+                            currentUser={currentUser} 
+                            onCommentAdded={handleCommentAdded} 
+                         />
+                        </div>
+                    </AccordionContent>
+                  </Card>
+                </AccordionItem>
+              ))}
+            </Accordion>
           )}
         </CardContent>
+        {documents.length > 0 && !isLoading && (
+          <CardFooter>
+            <p className="text-xs text-muted-foreground">Displaying {documents.length} documents.</p>
+          </CardFooter>
+        )}
       </Card>
     </div>
   );
