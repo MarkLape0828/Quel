@@ -1,3 +1,4 @@
+
 import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {

@@ -1,3 +1,4 @@
+
 "use server";
 
 import type { Notification, NotificationType } from "./types";
