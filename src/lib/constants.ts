@@ -15,14 +15,18 @@ import {
   BookUser, 
   ListChecks, 
   Home as UserHomeIcon, // For User Dashboard
+  CarFront, // For Vehicle Registration
+  Contact, // For Visitor Passes
+  Car, // Admin Vehicle Management
+  Users2, // Admin Visitor Pass Management
 } from 'lucide-react';
 
 export const APP_NAME = "The Quel";
 
 export const NAV_ITEMS: NavItem[] = [
   {
-    title: 'My Dashboard', // Changed from 'Community Feed'
-    href: '/community-feed', // This page is now the dashboard
+    title: 'My Dashboard',
+    href: '/community-feed',
     icon: UserHomeIcon, 
   },
   {
@@ -46,6 +50,16 @@ export const NAV_ITEMS: NavItem[] = [
     icon: CreditCard,
   },
   {
+    title: 'Visitor Passes',
+    href: '/visitor-passes',
+    icon: Contact,
+  },
+  {
+    title: 'Vehicle Registration',
+    href: '/vehicle-registration',
+    icon: CarFront,
+  },
+  {
     title: 'Contact Directory',
     href: '/contact-directory',
     icon: ListChecks,
@@ -63,6 +77,8 @@ export const PageTitles: Record<string, string> = {
   '/service-requests': 'Service Requests',
   '/event-calendar': 'Event Calendar',
   '/billing': 'My Billing',
+  '/visitor-passes': 'Visitor Passes',
+  '/vehicle-registration': 'Vehicle Registration',
   '/contact-directory': 'Contact Directory',
   '/profile': 'My Profile',
   '/notifications': 'Notifications',
@@ -83,7 +99,7 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
    {
     title: 'Billing Management',
     href: '/admin/billing',
-    icon: BillingUsersIcon, // Specific icon for this
+    icon: BillingUsersIcon,
   },
   {
     title: 'User Management',
@@ -99,6 +115,16 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     title: 'Document Management',
     href: '/admin/documents',
     icon: FolderKanban,
+  },
+  {
+    title: 'Visitor Passes',
+    href: '/admin/visitor-passes',
+    icon: Users2,
+  },
+  {
+    title: 'Vehicle Registrations',
+    href: '/admin/vehicle-registrations',
+    icon: Car,
   },
   {
     title: 'Manage Contacts',
@@ -118,6 +144,8 @@ export const AdminPageTitles: Record<string, string> = {
   '/admin/user-management': 'User Management',
   '/admin/service-requests': 'Manage Service Requests',
   '/admin/documents': 'Manage Documents',
+  '/admin/visitor-passes': 'Manage Visitor Passes',
+  '/admin/vehicle-registrations': 'Manage Vehicle Registrations',
   '/admin/contact-directory': 'Manage Contact Directory',
   '/admin/profile': 'My Admin Profile',
   '/admin/notifications': 'Admin Notifications', 

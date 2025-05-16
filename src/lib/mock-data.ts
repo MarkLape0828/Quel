@@ -1,5 +1,5 @@
 
-import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest } from './types';
+import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest, VisitorPassRequest, VehicleRegistration } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {
   if (annualInterestRate === 0) {
@@ -287,3 +287,60 @@ export let mockDirectoryContacts: DirectoryContact[] = [
 
 // This is now defined in service-requests/actions.ts to be mutable by actions
 // export let mockServiceRequests: ServiceRequest[] = [...]
+
+// Mock Visitor Pass Requests
+export let mockVisitorPasses: VisitorPassRequest[] = [
+  {
+    id: 'vp1',
+    userId: 'user123',
+    userName: 'Alice Member',
+    visitorName: 'John Smith',
+    visitDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 3 days from now
+    visitStartTime: '10:00 AM',
+    durationHours: 4,
+    vehiclePlate: 'XYZ 123',
+    status: 'pending',
+    requestedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(), // 1 day ago
+  },
+  {
+    id: 'vp2',
+    userId: 'user456',
+    userName: 'Bob Homeowner',
+    visitorName: 'Jane Doe',
+    visitDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 1 week from now
+    status: 'approved',
+    requestedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    processedByUserId: 'admin001',
+    processedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+];
+
+// Mock Vehicle Registrations
+export let mockVehicleRegistrations: VehicleRegistration[] = [
+  {
+    id: 'vr1',
+    userId: 'user123',
+    userName: 'Alice Member',
+    make: 'Toyota',
+    model: 'Camry',
+    year: '2021',
+    color: 'Silver',
+    licensePlate: 'ABC 123',
+    registeredAt: new Date('2023-01-15T00:00:00Z').toISOString(),
+    status: 'active',
+    permitNumber: 'P00123',
+    permitIssuedAt: new Date('2023-01-16T00:00:00Z').toISOString(),
+  },
+  {
+    id: 'vr2',
+    userId: 'user456',
+    userName: 'Bob Homeowner',
+    make: 'Honda',
+    model: 'CR-V',
+    year: '2022',
+    color: 'Blue',
+    licensePlate: 'DEF 456',
+    registeredAt: new Date('2023-05-10T00:00:00Z').toISOString(),
+    status: 'pending_permit',
+  },
+];

@@ -130,7 +130,7 @@ export interface DirectoryContact {
 }
 
 // Notification System Types
-export type NotificationType = 'billing' | 'announcement' | 'service_request' | 'document_comment' | 'general';
+export type NotificationType = 'billing' | 'announcement' | 'service_request' | 'document_comment' | 'general' | 'visitor_pass' | 'vehicle_registration';
 
 export interface Notification {
   id: string;
@@ -141,4 +141,38 @@ export interface Notification {
   link?: string; // Optional link to navigate to when clicked
   isRead: boolean;
   createdAt: string; // ISO string format
+}
+
+// Security Features Types
+export type VisitorPassStatus = 'pending' | 'approved' | 'rejected' | 'expired' | 'cancelled';
+export interface VisitorPassRequest {
+  id: string;
+  userId: string; // ID of the resident who made the request
+  userName: string; // Name of the resident
+  visitorName: string;
+  visitDate: string; // YYYY-MM-DD
+  visitStartTime?: string; // Optional: e.g., "10:00 AM"
+  durationHours?: number; // Optional: e.g., 4 hours
+  vehiclePlate?: string;
+  status: VisitorPassStatus;
+  requestedAt: string; // ISO timestamp
+  processedByUserId?: string; // Admin who processed
+  processedAt?: string; // ISO timestamp
+  notes?: string; // Admin notes for rejection etc.
+}
+
+export type VehicleStatus = 'active' | 'inactive' | 'pending_permit' | 'permit_issued';
+export interface VehicleRegistration {
+  id: string;
+  userId: string; // ID of the resident
+  userName: string; // Name of the resident
+  make: string;
+  model: string;
+  year: string;
+  color: string;
+  licensePlate: string;
+  registeredAt: string; // ISO timestamp
+  permitNumber?: string; // Assigned by admin
+  permitIssuedAt?: string; // ISO timestamp
+  status: VehicleStatus;
 }
