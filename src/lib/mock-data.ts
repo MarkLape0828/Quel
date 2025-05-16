@@ -1,5 +1,5 @@
 
-import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest, VisitorPassRequest, VehicleRegistration } from './types';
+import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest, VisitorPassRequest, VehicleRegistration, Announcement } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {
   if (annualInterestRate === 0) {
@@ -342,5 +342,35 @@ export let mockVehicleRegistrations: VehicleRegistration[] = [
     licensePlate: 'DEF 456',
     registeredAt: new Date('2023-05-10T00:00:00Z').toISOString(),
     status: 'pending_permit',
+  },
+];
+
+// Mock Announcements
+export let mockAnnouncements: Announcement[] = [
+  {
+    id: "ann1",
+    title: "Annual HOA Meeting Announced",
+    content: "Join us for the annual HOA meeting on July 15th at 7 PM in the community hall. We will discuss the budget for the upcoming year and upcoming projects.",
+    date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 5 days ago
+    type: "announcement",
+    author: "HOA Board",
+  },
+  {
+    id: "ann2",
+    title: "Summer Pool Party!",
+    content: "Get ready for our annual summer pool party! Food, games, and fun for the whole family. July 20th, 12 PM - 4 PM.",
+    date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 10 days ago
+    type: "event",
+    author: "Events Committee",
+    imageUrl: "https://placehold.co/600x200.png",
+    aiHint: "pool party",
+  },
+   {
+    id: "ann3",
+    title: "Website Maintenance Scheduled",
+    content: "The community portal will undergo scheduled maintenance on July 5th from 2 AM to 4 AM. Access may be intermittent during this period.",
+    date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 2 days ago
+    type: "announcement",
+    author: "Tech Team",
   },
 ];

@@ -10,9 +10,11 @@ export interface Announcement {
   id: string;
   title: string;
   content: string;
-  date: string;
+  date: string; // Should be YYYY-MM-DD or ISO string
   type: 'announcement' | 'event';
   author?: string;
+  imageUrl?: string; // Optional image for event announcements
+  aiHint?: string; // For placeholder image generation hint
 }
 
 export interface Comment {

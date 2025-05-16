@@ -19,6 +19,7 @@ import {
   Contact, // For Visitor Passes
   Car, // Admin Vehicle Management
   Users2, // Admin Visitor Pass Management
+  Megaphone, // For Announcements Management
 } from 'lucide-react';
 
 export const APP_NAME = "The Quel";
@@ -107,6 +108,11 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     icon: UserCog,
   },
   {
+    title: 'Manage Announcements',
+    href: '/admin/announcements',
+    icon: Megaphone,
+  },
+  {
     title: 'Service Requests',
     href: '/admin/service-requests',
     icon: ClipboardList,
@@ -142,6 +148,7 @@ export const AdminPageTitles: Record<string, string> = {
   '/admin/dashboard': 'Admin Dashboard',
   '/admin/billing': 'Billing Management',
   '/admin/user-management': 'User Management',
+  '/admin/announcements': 'Manage Announcements',
   '/admin/service-requests': 'Manage Service Requests',
   '/admin/documents': 'Manage Documents',
   '/admin/visitor-passes': 'Manage Visitor Passes',

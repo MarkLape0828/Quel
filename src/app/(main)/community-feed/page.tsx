@@ -4,13 +4,14 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { Announcement, ServiceRequest, CalendarEvent, BillingInfo } from "@/lib/types";
+import type { Announcement, ServiceRequest, CalendarEvent, BillingInfo, User } from "@/lib/types";
 import { Megaphone, CalendarDays, UserCircle, CreditCard, Wrench, Briefcase, PartyPopper, Construction, CalendarCheck2, Home } from "lucide-react";
 import Image from "next/image";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { mockUserBillingInfo } from '@/lib/mock-data';
+import { mockUserBillingInfo, mockUsers } from '@/lib/mock-data';
 import { getServiceRequestsForUser } from '@/app/(main)/service-requests/actions';
+import { getAnnouncements } from '@/lib/announcement-actions'; // Import new action
 
 // Mock events data, ideally from a shared service
 const MOCK_EVENTS_DATA: CalendarEvent[] = [
@@ -29,33 +30,6 @@ const MOCK_EVENTS_DATA: CalendarEvent[] = [
     category: "community",
   },
 ];
-
-const announcements_data: Announcement[] = [
-  {
-    id: "1",
-    title: "Annual HOA Meeting Announced",
-    content: "Join us for the annual HOA meeting on July 15th at 7 PM in the community hall. We will discuss the budget for the upcoming year and upcoming projects.",
-    date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 5 days ago
-    type: "announcement",
-    author: "HOA Board",
-  },
-  {
-    id: "2",
-    title: "Summer Pool Party!",
-    content: "Get ready for our annual summer pool party! Food, games, and fun for the whole family. July 20th, 12 PM - 4 PM.",
-    date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 10 days ago
-    type: "event",
-    author: "Events Committee",
-  },
-   {
-    id: "new-ann-1",
-    title: "Website Maintenance Scheduled",
-    content: "The community portal will undergo scheduled maintenance on July 5th from 2 AM to 4 AM. Access may be intermittent during this period.",
-    date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 2 days ago
-    type: "announcement",
-    author: "Tech Team",
-  },
-].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 interface QuickStatCardProps {
   title: string;
@@ -115,8 +89,10 @@ export default function UserDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
 
-
+  // MOCK USER ID - In a real app, get this from auth session
   const MOCK_USER_ID = "user123"; 
+  const currentUser = mockUsers.find(u => u.id === MOCK_USER_ID) || mockUsers[0];
+
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -131,7 +107,8 @@ export default function UserDashboardPage() {
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || (a.startTime || "").localeCompare(b.startTime || ""));
       setUpcomingEvent(sortedEvents.length > 0 ? sortedEvents[0] : null);
       
-      setAnnouncements(announcements_data);
+      const fetchedAnnouncements = await getAnnouncements(); // Fetch from new action
+      setAnnouncements(fetchedAnnouncements);
       setIsLoading(false);
     }
     loadDashboardData();
@@ -140,7 +117,8 @@ export default function UserDashboardPage() {
   return (
     <div className="space-y-8">
       <section>
-        <h1 className="text-3xl font-bold text-foreground mb-6">My Dashboard</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-1">Hello, {currentUser.firstName}!</h1>
+        <p className="text-muted-foreground mb-6">Welcome to your dashboard. Here's a quick overview.</p>
         {isLoading ? (
            <div className="grid md:grid-cols-3 gap-4 animate-pulse">
              {[1,2,3].map(i => <Card key={i} className="shadow-md"><CardContent className="pt-6"><div className="h-24 bg-muted rounded"></div></CardContent></Card>)}
@@ -195,14 +173,14 @@ export default function UserDashboardPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{item.content}</p>
-                {item.type === 'event' && (
+                {item.type === 'event' && item.imageUrl && (
                     <Image 
-                        src="https://placehold.co/600x200.png" 
+                        src={item.imageUrl} 
                         alt={item.title} 
                         width={600} 
                         height={200} 
                         className="rounded-md object-cover aspect-[3/1]"
-                        data-ai-hint="community event" 
+                        data-ai-hint={item.aiHint || "community event"}
                     />
                 )}
               </CardContent>
@@ -218,6 +196,13 @@ export default function UserDashboardPage() {
             </Card>
           ))}
         </div>
+         {announcements.length > 3 && (
+            <div className="mt-6 text-center">
+                <Button variant="outline" asChild>
+                    <Link href="/notifications">View All Announcements & Notifications</Link>
+                </Button>
+            </div>
+        )}
       </section>
     </div>
   );
