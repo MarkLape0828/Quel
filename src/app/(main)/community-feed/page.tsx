@@ -5,31 +5,14 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Announcement, ServiceRequest, CalendarEvent, BillingInfo, User } from "@/lib/types";
-import { Megaphone, CalendarDays, UserCircle, CreditCard, Wrench, Briefcase, PartyPopper, Construction, CalendarCheck2, Home } from "lucide-react";
+import { Megaphone, CalendarDays, UserCircle, CreditCard, Wrench, Briefcase, PartyPopper, Construction, CalendarCheck2, Home, User as UserIconLucide } from "lucide-react";
 import Image from "next/image";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { mockUserBillingInfo, mockUsers } from '@/lib/mock-data';
 import { getServiceRequestsForUser } from '@/app/(main)/service-requests/actions';
-import { getAnnouncements } from '@/lib/announcement-actions'; // Import new action
-
-// Mock events data, ideally from a shared service
-const MOCK_EVENTS_DATA: CalendarEvent[] = [
-  {
-    id: "ev1",
-    title: "Board Meeting",
-    date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 1 week from now
-    startTime: "19:00",
-    category: "meeting",
-  },
-  {
-    id: "ev2",
-    title: "Community BBQ",
-    date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 2 weeks from now
-    startTime: "12:00",
-    category: "community",
-  },
-];
+import { getAnnouncements } from '@/lib/announcement-actions'; 
+import { getCommunityEvents } from '@/lib/event-actions'; // Import new event action
 
 interface QuickStatCardProps {
   title: string;
@@ -77,7 +60,8 @@ const getEventIcon = (category: CalendarEvent['category']) => {
     case 'meeting': return Briefcase;
     case 'community': return PartyPopper;
     case 'maintenance': return Construction;
-    case 'event': return CalendarCheck2;
+    case 'personal': return UserIconLucide;
+    case 'event': 
     default: return CalendarCheck2;
   }
 };
@@ -97,17 +81,18 @@ export default function UserDashboardPage() {
   useEffect(() => {
     async function loadDashboardData() {
       setIsLoading(true);
-      setUserBillingInfo(mockUserBillingInfo); // Mock data
+      setUserBillingInfo(mockUserBillingInfo); // Mock data for now
 
       const requests = await getServiceRequestsForUser(MOCK_USER_ID);
       setOpenServiceRequestsCount(requests.filter(r => r.status === 'pending' || r.status === 'in-progress').length);
       
-      const sortedEvents = [...MOCK_EVENTS_DATA]
-        .filter(event => new Date(event.date) >= new Date(new Date().setHours(0,0,0,0)))
+      const communityEvents = await getCommunityEvents();
+      const sortedEvents = [...communityEvents]
+        .filter(event => new Date(event.date) >= new Date(new Date().setHours(0,0,0,0))) // Only future or today's events
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime() || (a.startTime || "").localeCompare(b.startTime || ""));
       setUpcomingEvent(sortedEvents.length > 0 ? sortedEvents[0] : null);
       
-      const fetchedAnnouncements = await getAnnouncements(); // Fetch from new action
+      const fetchedAnnouncements = await getAnnouncements(); 
       setAnnouncements(fetchedAnnouncements);
       setIsLoading(false);
     }
@@ -137,7 +122,7 @@ export default function UserDashboardPage() {
             )}
             {upcomingEvent && (
                <QuickStatCard 
-                title="Next Event"
+                title="Next Community Event"
                 value={upcomingEvent.title}
                 icon={getEventIcon(upcomingEvent.category)}
                 description={`${formatDateDisplay(upcomingEvent.date)} ${upcomingEvent.startTime ? `at ${upcomingEvent.startTime}` : ''}`}

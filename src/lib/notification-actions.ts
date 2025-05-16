@@ -131,3 +131,14 @@ export async function sendBillingReminder(
         return { success: false, message: `Failed to send reminder to ${user.firstName} ${user.lastName}.` };
     }
 }
+
+// Action for Admin to notify user about an event - can be expanded
+export async function notifyUserOfEvent(userId: string, eventTitle: string, eventDate: string) {
+    await createNotification({
+        userId: userId,
+        title: "Upcoming Event Reminder",
+        message: `Don't forget: "${eventTitle}" is scheduled for ${new Date(eventDate).toLocaleDateString()}.`,
+        type: "event",
+        link: "/event-calendar",
+    });
+}

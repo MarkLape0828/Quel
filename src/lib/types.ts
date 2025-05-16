@@ -72,8 +72,10 @@ export interface CalendarEvent {
   startTime?: string;
   endTime?: string;
   description?: string;
-  category: 'event' | 'meeting' | 'maintenance' | 'community';
+  category: 'event' | 'meeting' | 'maintenance' | 'community' | 'personal'; // Added 'personal'
   location?: string;
+  isUserSpecific?: boolean; // To flag events added by the user
+  userId?: string; // ID of the user if it's a user-specific event
 }
 
 export interface PaymentHistoryEntry {
@@ -132,7 +134,7 @@ export interface DirectoryContact {
 }
 
 // Notification System Types
-export type NotificationType = 'billing' | 'announcement' | 'service_request' | 'document_comment' | 'general' | 'visitor_pass' | 'vehicle_registration';
+export type NotificationType = 'billing' | 'announcement' | 'service_request' | 'document_comment' | 'general' | 'visitor_pass' | 'vehicle_registration' | 'event';
 
 export interface Notification {
   id: string;
@@ -178,3 +180,4 @@ export interface VehicleRegistration {
   permitIssuedAt?: string; // ISO timestamp
   status: VehicleStatus;
 }
+

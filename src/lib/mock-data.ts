@@ -1,5 +1,5 @@
 
-import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest, VisitorPassRequest, VehicleRegistration, Announcement } from './types';
+import type { BillingInfo, PaymentHistoryEntry, DocumentItem, User, UserRole, Comment, DirectoryContact, ServiceRequest, VisitorPassRequest, VehicleRegistration, Announcement, CalendarEvent } from './types';
 
 const calculateMonthlyPayment = (loanAmount: number, annualInterestRate: number, loanTermYears: number): number => {
   if (annualInterestRate === 0) {
@@ -362,7 +362,7 @@ export let mockAnnouncements: Announcement[] = [
     date: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 10 days ago
     type: "event",
     author: "Events Committee",
-    imageUrl: "https://placehold.co/600x200.png",
+    imageUrl: "https://placehold.co/600x200.png?text=Pool+Party",
     aiHint: "pool party",
   },
    {
@@ -373,4 +373,79 @@ export let mockAnnouncements: Announcement[] = [
     type: "announcement",
     author: "Tech Team",
   },
+];
+
+// Mock Calendar Events
+export let mockCommunityEvents: CalendarEvent[] = [
+  {
+    id: "event-1",
+    title: "Board Meeting",
+    date: "2024-07-10", // Use a future or consistent date for testing
+    startTime: "19:00",
+    endTime: "21:00",
+    description: "Monthly HOA board meeting. Open to all residents.",
+    category: "meeting",
+    location: "Community Hall - Room A",
+  },
+  {
+    id: "event-2",
+    title: "Community BBQ",
+    date: "2024-07-20",
+    startTime: "12:00",
+    endTime: "16:00",
+    description: "Join us for a fun community BBQ! Food, games, and music.",
+    category: "community",
+    location: "Park Pavilion",
+  },
+  {
+    id: "event-3",
+    title: "Pool Maintenance",
+    date: "2024-07-25",
+    startTime: "08:00",
+    endTime: "17:00",
+    description: "The community pool will be closed for scheduled maintenance.",
+    category: "maintenance",
+    location: "Community Pool",
+  },
+  {
+    id: "event-4",
+    title: "Movie Night Under the Stars",
+    date: "2024-08-05",
+    startTime: "20:30",
+    description: "Family-friendly movie night at the community green. Bring your blankets!",
+    category: "event",
+    location: "Community Green",
+  },
+];
+
+export let mockUserSpecificEvents: CalendarEvent[] = [
+    {
+        id: "user-event-1-user123",
+        userId: "user123",
+        title: "Dentist Appointment",
+        date: "2024-07-12",
+        startTime: "14:00",
+        description: "Annual check-up.",
+        category: "personal",
+        isUserSpecific: true,
+    },
+    {
+        id: "user-event-2-user123",
+        userId: "user123",
+        title: "Pick up groceries",
+        date: "2024-07-12",
+        startTime: "17:00",
+        category: "personal",
+        isUserSpecific: true,
+    },
+    {
+        id: "user-event-1-user456",
+        userId: "user456",
+        title: "Book Club Meeting",
+        date: "2024-07-18",
+        startTime: "18:30",
+        location: "Local Library",
+        category: "personal",
+        isUserSpecific: true,
+    }
 ];
