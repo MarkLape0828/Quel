@@ -1,29 +1,29 @@
+
 import type { NavItem } from '@/lib/types';
 import {
-  LayoutDashboard,
+  LayoutDashboard, // General Dashboard icon
   FileText,
   Wrench,
   CalendarDays,
   CreditCard,
-  Users,
+  Users as BillingUsersIcon, // For Admin Billing specific
   ShieldCheck,
   ClipboardList,
   FolderKanban,
   UserCog, 
-  LogOut, 
   IdCard,
-  BookUser, // For admin manage contacts
-  ListChecks, // For user contact directory
-  Bell, // Added Bell Icon
+  BookUser, 
+  ListChecks, 
+  Home as UserHomeIcon, // For User Dashboard
 } from 'lucide-react';
 
 export const APP_NAME = "The Quel";
 
 export const NAV_ITEMS: NavItem[] = [
   {
-    title: 'Community Feed',
-    href: '/community-feed',
-    icon: LayoutDashboard,
+    title: 'My Dashboard', // Changed from 'Community Feed'
+    href: '/community-feed', // This page is now the dashboard
+    icon: UserHomeIcon, 
   },
   {
     title: 'Documents',
@@ -55,24 +55,17 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/profile',
     icon: IdCard,
   },
-  // Bell icon is usually in the header, not a main nav item, but added for completeness if needed.
-  // {
-  //   title: 'Notifications',
-  //   href: '/notifications', // A dedicated notifications page might be useful
-  //   icon: Bell,
-  // },
 ];
 
 export const PageTitles: Record<string, string> = {
-  '/community-feed': 'Community Feed',
+  '/community-feed': 'My Dashboard', 
   '/documents': 'Document Repository',
   '/service-requests': 'Service Requests',
   '/event-calendar': 'Event Calendar',
   '/billing': 'My Billing',
   '/contact-directory': 'Contact Directory',
   '/profile': 'My Profile',
-  '/notifications': 'Notifications', // Title for a potential notifications page
-  // Auth Pages
+  '/notifications': 'Notifications',
   '/login': 'Login',
   '/register': 'Register',
   '/forgot-password': 'Forgot Password',
@@ -83,9 +76,14 @@ export const ADMIN_APP_NAME = "The Quel Admin";
 
 export const ADMIN_NAV_ITEMS: NavItem[] = [
    {
+    title: 'Admin Dashboard',
+    href: '/admin/dashboard',
+    icon: LayoutDashboard, 
+  },
+   {
     title: 'Billing Management',
     href: '/admin/billing',
-    icon: Users,
+    icon: BillingUsersIcon, // Specific icon for this
   },
   {
     title: 'User Management',
@@ -112,21 +110,16 @@ export const ADMIN_NAV_ITEMS: NavItem[] = [
     href: '/admin/profile',
     icon: IdCard,
   },
-  // {
-  //   title: 'Admin Notifications',
-  //   href: '/admin/notifications',
-  //   icon: Bell,
-  // },
 ];
 
 export const AdminPageTitles: Record<string, string> = {
+  '/admin/dashboard': 'Admin Dashboard',
   '/admin/billing': 'Billing Management',
   '/admin/user-management': 'User Management',
   '/admin/service-requests': 'Manage Service Requests',
   '/admin/documents': 'Manage Documents',
   '/admin/contact-directory': 'Manage Contact Directory',
   '/admin/profile': 'My Admin Profile',
-  '/admin/notifications': 'Admin Notifications', // Title for a potential admin notifications page
-  // Admin Auth Pages (if separate, otherwise uses main PageTitles)
+  '/admin/notifications': 'Admin Notifications', 
   '/admin/login': 'Admin Login',
 };
